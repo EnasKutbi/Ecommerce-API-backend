@@ -46,3 +46,32 @@ SELECT * FROM Customers;
 --Delete from customers
 DELETE FROM Customers
     WHERE customer_address != 'KSA';
+
+
+
+--nouir 
+--create product table
+CREATE TABLE PRODUCTS(
+    product_id INT PRIMARY KEY,
+    product_name varchar(50) NOT NULL,
+    product_price FLOAT NOT NULL,
+    product_description  TEXT NOT NULL,
+    category_id INT ,FOREIGN KEY  (category_id) REFERENCES Categories(Category_id)
+);
+--insert product
+INSERT INTO PRODUCTS(product_id,product_name,product_price,product_description ,category_id)
+VALUES
+(1011,'iphone14 pro max',3000.100,'128GB BLACK COLOR 6.1 INCHES',3),
+(1022,'iphone watch',1049.00,'New Apple Watch SE (2nd Gen, 2023) [GPS + Cellular 40mm] Smartwatch with Starlight Aluminum Case with Starlight Sport Band S/M. Fitness & Sleep Tracker',4),
+(1033,'usb-c to Lightning Adapter',29,'The Apple 20W USB‑C Power Adapter offers fast, efficient charging at home, in the office, or on the go. Pair it with iPhone 8 or later for fast charging — 50 percent battery in around 30 minutes.¹ Or pair it with the iPad Pro and iPad Air for optimal charging performance. Compatible with any USB-C enabled device.',2),
+(1044,'iphone charger',39,'The Apple 20W USB‑C Power Adapter offers fast, efficient charging at home, in the office, or on the go. Pair it with iPhone 8 or later for fast charging — 50 percent battery in around 30 minutes.¹ Or pair it with the iPad Pro and iPad Air for optimal charging performance. Compatible with any USB-C enabled device.',2),
+(1055,'Elevation Lab GoStand Adjustable Stand for iphone',75.95,'ElevationLab GoStand is the adjustable, lightweight stand for iPhone. The clever design lets you position your screen at a wide range of angles and folds flat to fit in your pocket. It features premium composite and silicone construction with a steel hinge. Precision indexable back support adjusts with a low-profile button. Perfect for streaming Apple Fitness+ workouts, travel, group video, watching movies, gaming, and more',5),
+(1066,'Mophie powerstation',300,'The mophie powerstation provides fast, portable power with dual USB-C PD ports. That means you can charge two devices at once. Get up to 43 extra hours of power.* Tuck the compact powerstation in your bag, and you are ready for any power demands the day throws at you',2);
+
+--READ 
+select P.product_id , P.product_name , C.Category_name 
+from PRODUCTS P
+inner join Categories C
+ON P.Category_id=C.Category_id;
+
+
