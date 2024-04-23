@@ -21,7 +21,7 @@ VALUES
 SELECT * FROM Categories;
 
 --ENAS
---Create Cusromers Table
+--Create Customers Table
 CREATE TABLE Customers(
     customer_id SERIAL PRIMARY KEY,
     customer_first_name VARCHAR(50) NOT NULL,
@@ -30,3 +30,19 @@ CREATE TABLE Customers(
     customer_password VARCHAR(50) NOT NULL,
     customer_address VARCHAR(50) NOT NULL
 );
+
+--Insert Customers
+INSERT INTO Customers(customer_first_name, customer_last_name, customer_email, customer_password, customer_address)
+VALUES
+('Yusef', 'Ahmed', 'Y_Ahmed@gmail.com', '12345', 'Egypt'),
+('Mai', 'Ali', 'maiali@gmail.com', '857302', 'KSA'),
+('Fatimah', 'Mohamed', 'fafmoh@gmail.com', '76321', 'KSA'),
+('Enas', 'Kutbi', 'enaskutbi@gmail.com', '0029837', 'KSA'),
+('Emtinan', 'Maji', 'emtinanmaji@gmail.com', '5476980', 'KSA');
+
+--Read Customers Table
+SELECT * FROM Customers;
+
+--Delete from customers
+DELETE FROM Customers
+    WHERE customer_address != 'KSA';
