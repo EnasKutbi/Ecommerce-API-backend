@@ -76,7 +76,7 @@ VALUES
  --Order_Item Table
  CREATE TABLE Order_Item(
     Order_Item SERIAL PRIMARY KEY,
-    order_id INT, CONSTRAINT fk_Orders FOREIGN KEY(oder_id) REFERENCES Orders(Order_id),
+    order_id INT, CONSTRAINT fk_Orders FOREIGN KEY(order_id) REFERENCES Orders(Order_id),
     product_id INT, CONSTRAINT fk_Products FOREIGN KEY(product_id) REFERENCES Products(Product_id)
 );
 
