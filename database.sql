@@ -23,16 +23,16 @@ SELECT * FROM Categories;
 --ENAS
 --Create Customers Table
 CREATE TABLE Customers(
-    customer_id SERIAL PRIMARY KEY,
-    customer_first_name VARCHAR(50) NOT NULL,
-    customer_last_name VARCHAR(50),
-    customer_email VARCHAR(50) UNIQUE NOT NULL,
-    customer_password VARCHAR(50) NOT NULL,
-    customer_address VARCHAR(50) NOT NULL
+    Customer_id SERIAL PRIMARY KEY,
+    Customer_first_name VARCHAR(50) NOT NULL,
+    Customer_last_name VARCHAR(50),
+    Customer_email VARCHAR(50) UNIQUE NOT NULL,
+    Customer_password VARCHAR(50) NOT NULL,
+    Customer_address VARCHAR(50) NOT NULL
 );
 
 --Insert Customers
-INSERT INTO Customers(customer_first_name, customer_last_name, customer_email, customer_password, customer_address)
+INSERT INTO Customers(Customer_first_name, Customer_last_name, Customer_email, Customer_password, Customer_address)
 VALUES
 ('Yusef', 'Ahmed', 'Y_Ahmed@gmail.com', '12345', 'Egypt'),
 ('Mai', 'Ali', 'maiali@gmail.com', '857302', 'KSA'),
@@ -40,33 +40,34 @@ VALUES
 ('Enas', 'Kutbi', 'enaskutbi@gmail.com', '0029837', 'KSA'),
 ('Emtinan', 'Maji', 'emtinanmaji@gmail.com', '5476980', 'KSA');
 
+--Update a customer name
+UPDATE Customers SET Customer_first_name = 'Fatima'
+    WHERE Customer_email = 'fafmoh@gmail.com';
+
 --Read Customers Table
 SELECT * FROM Customers;
 
 --Delete from customers
 DELETE FROM Customers
-    WHERE customer_address != 'KSA';
+    WHERE Customer_address != 'KSA';
 
 --ATHEER 
 -- Orders Table
 CREATE TABLE Orders(
     Order_id SERIAL PRIMARY KEY,
-    Customer_id INT,
     Order_Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     Order_Status VARCHAR(20) NOT NULL,
     Order_Total INT NOT NULL,
-    CONSTRAINT fk_Customers
-      FOREIGN KEY(Customer_id) 
-      REFERENCES Customers(Customer_id)
+    customer_id INT, CONSTRAINT fk_Customers FOREIGN KEY(customer_id) REFERENCES Customers(Customer_id)
 );
 
 --Insert Orders
 INSERT INTO Orders(Order_Status, Order_Total)
 VALUES
-('Processing', 63);
-('Canceled', 222);
-('Pending', 57);
-('Pending', 88);
+('Processing', 63),
+('Canceled', 222),
+('Pending', 57),
+('Pending', 88),
 ('Processing', 92);
  
  -- Read Orders Table
@@ -74,14 +75,14 @@ VALUES
 
  --Order_Item Table
  CREATE TABLE Order_Item(
-    Order_Item SERIAL PRIMARY KEY
-    --Order_id INT CONSTRAINT fk_Orders FOREIGN KEY(Order_id) REFERENCES Orders(Order_id)
-    --Product_id INT CONSTRAINT fk_Products FOREIGN KEY(Product_id) REFERENCES Products(Product_id)
+    Order_Item SERIAL PRIMARY KEY,
+    order_id INT, CONSTRAINT fk_Orders FOREIGN KEY(oder_id) REFERENCES Orders(Order_id),
+    product_id INT, CONSTRAINT fk_Products FOREIGN KEY(product_id) REFERENCES Products(Product_id)
 );
 
 --nouir 
 --create product table
-CREATE TABLE PRODUCTS(
+CREATE TABLE Products(
     product_id INT PRIMARY KEY,
     product_name varchar(50) NOT NULL,
     product_price FLOAT NOT NULL,
@@ -89,7 +90,7 @@ CREATE TABLE PRODUCTS(
     category_id INT ,FOREIGN KEY  (category_id) REFERENCES Categories(Category_id)
 );
 --insert product
-INSERT INTO PRODUCTS(product_id,product_name,product_price,product_description ,category_id)
+INSERT INTO Products(product_id,product_name,product_price,product_description ,category_id)
 VALUES
 (1011,'iphone14 pro max',3000.100,'128GB BLACK COLOR 6.1 INCHES',3),
 (1022,'iphone watch',1049.00,'New Apple Watch SE (2nd Gen, 2023) [GPS + Cellular 40mm] Smartwatch with Starlight Aluminum Case with Starlight Sport Band S/M. Fitness & Sleep Tracker',4),
