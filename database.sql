@@ -46,3 +46,35 @@ SELECT * FROM Customers;
 --Delete from customers
 DELETE FROM Customers
     WHERE customer_address != 'KSA';
+
+--ATHEER 
+-- Orders Table
+CREATE TABLE Orders(
+    Order_id SERIAL PRIMARY KEY,
+    Customer_id INT,
+    Order_Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    Order_Status VARCHAR(20) NOT NULL,
+    Order_Total INT NOT NULL,
+    CONSTRAINT fk_Customers
+      FOREIGN KEY(Customer_id) 
+      REFERENCES Customers(Customer_id)
+);
+
+--Insert Orders
+INSERT INTO Orders(Order_Status, Order_Total)
+VALUES
+('Processing', 63);
+('Canceled', 222);
+('Pending', 57);
+('Pending', 88);
+('Processing', 92);
+ 
+ -- Read Orders Table
+ SELECT * FROM Orders;
+
+ --Order_Item Table
+ CREATE TABLE Order_Item(
+    Order_Item SERIAL PRIMARY KEY
+    --Order_id INT CONSTRAINT fk_Orders FOREIGN KEY(Order_id) REFERENCES Orders(Order_id)
+    --Product_id INT CONSTRAINT fk_Products FOREIGN KEY(Product_id) REFERENCES Products(Product_id)
+);
