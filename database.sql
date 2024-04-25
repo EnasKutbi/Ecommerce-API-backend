@@ -108,11 +108,5 @@ inner join Categories C
 ON P.Category_id=C.Category_id;
 
 
------------------------------------------------------------------------------
 
---READ 
-select P.product_id , P.product_name , C.Category_name 
-from PRODUCTS P
-inner join Categories C
-ON P.Category_id=C.Category_id;
 
