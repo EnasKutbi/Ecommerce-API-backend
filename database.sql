@@ -20,38 +20,71 @@ VALUES
 --Read Categories
 SELECT * FROM Categories;
 
---ENAS
---Create Customers Table
-CREATE TABLE Customers(
-    customer_id SERIAL PRIMARY KEY,
-    customer_first_name VARCHAR(50) NOT NULL,
-    customer_last_name VARCHAR(50),
-    customer_email VARCHAR(50) UNIQUE NOT NULL,
-    customer_password VARCHAR(50) NOT NULL,
-    customer_address VARCHAR(50) NOT NULL
+--ENAS && nouir
+--Create user Table
+CREATE TABLE users(
+user_id SERIAL PRIMARY KEY,
+user_name VARCHAR(100) NOT NULL,
+user_email varchar(100) UNIQUE NOT NULL,
+user_password varchar(255) NOT NULL,
+user_address varchar(100) NOT NULL,
+isAdmin BOOLEAN DEFAULT FALSE,
+isBanned BOOLEAN DEFAULT FALSE,
+createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+--Insert USER
+INSERT INTO users(user_name ,user_email, user_password, user_address,user_image,isAdmin,isBanned)
+VALUES
+('Yusef Ahmed', 'Y_Ahmed@gmail.com', '12345', 'Egypt','profile.jpg',TRUE,FALSE),
+('Mai Ali', 'maiali@gmail.com', '857302', 'KSA','NULL',TRUE,FALSE),
+('Fatimah Mohamed', 'fafmoh@gmail.com', '76321', 'KSA','NULL',FALSE,FALSE),
+('Enas Kutbi', 'enaskutbi@gmail.com', '0029837', 'KSA','USER.JPG',TRUE,FALSE),
+('Emtinan Maji', 'emtinanmaji@gmail.com', '5476980', 'KSA','NULL',FALSE,TRUE);
+
+--Update a  name column
+UPDATE users SET Customer_first_name = 'Fatima'
+    WHERE Customer_email = 'fafmoh@gmail.com';
+
+--Read USER Table
+SELECT * FROM users;
+
+--Delete from user
+DELETE FROM users
+    WHERE user_address != 'KSA';
+
+--ATHEER 
+-- Orders Table
+CREATE TABLE Orders(
+    Order_id SERIAL PRIMARY KEY,
+    Order_Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    Order_Status VARCHAR(20) NOT NULL,
+    Order_Total INT NOT NULL,
+    customer_id INT, CONSTRAINT fk_Customers FOREIGN KEY(customer_id) REFERENCES Customers(Customer_id)
 );
 
---Insert Customers
-INSERT INTO Customers(customer_first_name, customer_last_name, customer_email, customer_password, customer_address)
+--Insert Orders
+INSERT INTO Orders(Order_Status, Order_Total)
 VALUES
-('Yusef', 'Ahmed', 'Y_Ahmed@gmail.com', '12345', 'Egypt'),
-('Mai', 'Ali', 'maiali@gmail.com', '857302', 'KSA'),
-('Fatimah', 'Mohamed', 'fafmoh@gmail.com', '76321', 'KSA'),
-('Enas', 'Kutbi', 'enaskutbi@gmail.com', '0029837', 'KSA'),
-('Emtinan', 'Maji', 'emtinanmaji@gmail.com', '5476980', 'KSA');
+('Processing', 63),
+('Canceled', 222),
+('Pending', 57),
+('Pending', 88),
+('Processing', 92);
+ 
+ -- Read Orders Table
+ SELECT * FROM Orders;
 
---Read Customers Table
-SELECT * FROM Customers;
-
---Delete from customers
-DELETE FROM Customers
-    WHERE customer_address != 'KSA';
-
+ --Order_Item Table
+ CREATE TABLE Order_Item(
+    Order_Item SERIAL PRIMARY KEY,
+    order_id INT, CONSTRAINT fk_Orders FOREIGN KEY(order_id) REFERENCES Orders(Order_id),
+    product_id INT, CONSTRAINT fk_Products FOREIGN KEY(product_id) REFERENCES Products(Product_id)
+);
 
 
 --nouir 
 --create product table
-CREATE TABLE Products(
+CREATE TABLE PRODUCTS(
     product_id INT PRIMARY KEY,
     product_name varchar(50) NOT NULL,
     product_price FLOAT NOT NULL,
@@ -59,7 +92,7 @@ CREATE TABLE Products(
     category_id INT ,FOREIGN KEY  (category_id) REFERENCES Categories(Category_id)
 );
 --insert product
-INSERT INTO Products(product_id,product_name,product_price,product_description ,category_id)
+INSERT INTO PRODUCTS(product_id,product_name,product_price,product_description ,category_id)
 VALUES
 (1011,'iphone14 pro max',3000.100,'128GB BLACK COLOR 6.1 INCHES',3),
 (1022,'iphone watch',1049.00,'New Apple Watch SE (2nd Gen, 2023) [GPS + Cellular 40mm] Smartwatch with Starlight Aluminum Case with Starlight Sport Band S/M. Fitness & Sleep Tracker',4),
@@ -73,5 +106,7 @@ select P.product_id , P.product_name , C.Category_name
 from PRODUCTS P
 inner join Categories C
 ON P.Category_id=C.Category_id;
+
+
 
 
