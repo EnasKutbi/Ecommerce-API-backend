@@ -83,10 +83,15 @@ VALUES
 --nouir 
 --create product table
 CREATE TABLE Products(
-    product_id INT PRIMARY KEY,
+    product_id SERIAL PRIMARY KEY,
     product_name varchar(50) NOT NULL,
-    product_price FLOAT NOT NULL,
+    product_slug VARCHAR(100) UNIQUE NOT NULL,
+    product_image VARCHAR(100),
     product_description  TEXT NOT NULL,
+    product_price DECIMAL(10,2) NOT NULL,
+    product_quantity INT DEFAULT 0,
+    shipping INT DEFAULT 0,
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     category_id INT ,FOREIGN KEY  (category_id) REFERENCES Categories(Category_id)
 );
 --insert product
