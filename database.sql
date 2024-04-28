@@ -20,36 +20,37 @@ VALUES
 --Read Categories
 SELECT * FROM Categories;
 
---ENAS
---Create Customers Table
-CREATE TABLE Customers(
-    Customer_id SERIAL PRIMARY KEY,
-    Customer_first_name VARCHAR(50) NOT NULL,
-    Customer_last_name VARCHAR(50),
-    Customer_email VARCHAR(50) UNIQUE NOT NULL,
-    Customer_password VARCHAR(50) NOT NULL,
-    Customer_address VARCHAR(50) NOT NULL
+--ENAS && nouir
+--Create user Table
+CREATE TABLE Users(
+user_id SERIAL PRIMARY KEY,
+user_name VARCHAR(100) NOT NULL,
+user_email varchar(100) UNIQUE NOT NULL,
+user_password varchar(255) NOT NULL,
+user_address varchar(100) NOT NULL,
+isAdmin BOOLEAN DEFAULT FALSE,
+isBanned BOOLEAN DEFAULT FALSE,
+createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
---Insert Customers
-INSERT INTO Customers(Customer_first_name, Customer_last_name, Customer_email, Customer_password, Customer_address)
+--Insert USER
+INSERT INTO Users(user_name, user_email, user_password, user_address, user_image, isAdmin, isBanned)
 VALUES
-('Yusef', 'Ahmed', 'Y_Ahmed@gmail.com', '12345', 'Egypt'),
-('Mai', 'Ali', 'maiali@gmail.com', '857302', 'KSA'),
-('Fatimah', 'Mohamed', 'fafmoh@gmail.com', '76321', 'KSA'),
-('Enas', 'Kutbi', 'enaskutbi@gmail.com', '0029837', 'KSA'),
-('Emtinan', 'Maji', 'emtinanmaji@gmail.com', '5476980', 'KSA');
+('Yusef_Ahmed', 'Y_Ahmed@gmail.com', '12345', 'Egypt','profile.jpg',TRUE,FALSE),
+('Mai_Ali', 'maiali@gmail.com', '857302', 'KSA','NULL',TRUE,FALSE),
+('Fatimah_Mohamed', 'fafmoh@gmail.com', '76321', 'KSA','NULL',FALSE,FALSE),
+('Enas_Kutbi', 'enaskutbi@gmail.com', '0029837', 'KSA','USER.JPG',TRUE,FALSE),
+('Emtinan_Maji', 'emtinanmaji@gmail.com', '5476980', 'KSA','NULL',FALSE,TRUE);
 
---Update a customer name
-UPDATE Customers SET Customer_first_name = 'Fatima'
-    WHERE Customer_email = 'fafmoh@gmail.com';
+--Update a  name column
+UPDATE Users SET user_name = 'Fatima'
+    WHERE user_email = 'fafmoh@gmail.com';
 
---Read Customers Table
-SELECT * FROM Customers;
+--Read USER Table
+SELECT * FROM Users;
 
---Delete from customers
-DELETE FROM Customers
-    WHERE Customer_address != 'KSA';
+--Delete from user
+DELETE FROM Users
+    WHERE user_address != 'KSA';
 
 --ATHEER 
 -- Orders Table
@@ -80,10 +81,11 @@ VALUES
     product_id INT, CONSTRAINT fk_Products FOREIGN KEY(product_id) REFERENCES Products(Product_id)
 );
 
+
 --nouir 
 --create product table
-CREATE TABLE Products(
-    product_id SERIAL PRIMARY KEY,
+CREATE TABLE PRODUCTS(
+    product_id INT PRIMARY KEY,
     product_name varchar(50) NOT NULL,
     product_slug VARCHAR(100) UNIQUE NOT NULL,
     product_image VARCHAR(100),
@@ -95,7 +97,7 @@ CREATE TABLE Products(
     category_id INT ,FOREIGN KEY  (category_id) REFERENCES Categories(Category_id)
 );
 --insert product
-INSERT INTO Products(product_id,product_name,product_price,product_description ,category_id)
+INSERT INTO PRODUCTS(product_id, product_name, product_slug, product_image, product_description, product_price, product_quantity, shipping, createdAt, category_id)
 VALUES
 (1011,'iphone14 pro max',3000.100,'128GB BLACK COLOR 6.1 INCHES',3),
 (1022,'iphone watch',1049.00,'New Apple Watch SE (2nd Gen, 2023) [GPS + Cellular 40mm] Smartwatch with Starlight Aluminum Case with Starlight Sport Band S/M. Fitness & Sleep Tracker',4),
@@ -109,3 +111,7 @@ select P.product_id , P.product_name , C.Category_name
 from PRODUCTS P
 inner join Categories C
 ON P.Category_id=C.Category_id;
+
+
+
+
