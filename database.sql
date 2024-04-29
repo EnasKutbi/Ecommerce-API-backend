@@ -73,31 +73,62 @@ CREATE TABLE orders(
     order_status VARCHAR(20) DEFAULT 'Pending',
     user_id uuid, CONSTRAINT fk_users FOREIGN KEY(user_id) REFERENCES users(user_id), --update foreIgn key datatype (int to uuid)
     order_total INT NOT NULL,
-    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    user_id INT, 
+    FOREIGN KEY(User_id) REFERENCES Users(User_id)
 );
 
---Insert Orders
-INSERT INTO orders(order_date, order_status, order_total)
-VALUES
-('2042-04-20', 'Processing',  63),
-('2042-04-21', 'Canceled',  222),
-('2042-04-19', 'Pending',  57),
-('2042-04-20', 'Pending',  88),
-('2042-04-22', 'Processing', 92);
- 
 
- 
+-- Add a product_id column
+ALTER TABLE orders
+ADD product_id INT[];
+
+
+--Insert Orders
+INSERT INTO orders(order_status, order_total, user_id)
+VALUES
+('Processing', 63, 1),
+('Canceled', 222, 2),
+('Pending', 57, 3),
+('Pending', 88, 4),
+('Processing', 92, 5);
  
  -- Read Orders Table
  SELECT * FROM orders;
 
- --Order_Item Table
+-- JOIN
+ SELECT order_date, order_status, order_total, user_name, user_email, user_address
+ FROM orders INNER JOIN users ON orders.user_id = users.user_id;
+ 
+ -- Order_Item Table
  CREATE TABLE order_item(
     order_item SERIAL PRIMARY KEY,
-    order_item_quantity INT DEFAULT 0,
-    order_id INT, CONSTRAINT fk_orders FOREIGN KEY(order_id) REFERENCES orders(order_id),
-    product_id INT, CONSTRAINT fk_products FOREIGN KEY(product_id) REFERENCES products(product_id)
+    quantity INT,
+    order_id INT,
+    FOREIGN KEY(order_id) REFERENCES orders(order_id),
+    product_id INT,
+    FOREIGN KEY(product_id) REFERENCES products(product_id)
 );
+
+
+-- Insert order_item
+INSERT INTO order_item(quantity, order_id, product_id)
+VALUES
+(2,1,1011);
+(5,2,1022);
+(1,3,1033);
+(9,4,1044);
+(12,5,1055);
+
+-- JOIN order_item & orders
+SELECT order_date, order_total, order_status, quantity
+FROM order_item
+INNER JOIN orders ON order_item.order_id = orders.order_id;
+
+-- JOIN order_item & products
+SELECT product_id, product_name, product_price, quantity
+FROM order_item
+INNER JOIN products ON order_item.product_id = products.product_id;
+
 
 
 --nouir && Enas
