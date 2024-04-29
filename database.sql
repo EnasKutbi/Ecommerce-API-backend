@@ -35,6 +35,7 @@ isAdmin BOOLEAN DEFAULT FALSE,
 isBanned BOOLEAN DEFAULT FALSE,
 createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
 --Insert USER
 INSERT INTO users(user_name, user_email, user_password, user_address, user_image, isAdmin, isBanned)
 VALUES
@@ -43,11 +44,20 @@ VALUES
 ('Fatimah_Mohamed', 'fafmoh@gmail.com', '76321', 'KSA', 'NULL', TRUE, FALSE),
 ('Enas_Kutbi', 'enaskutbi@gmail.com', '0029837', 'KSA', 'USER.JPG', TRUE, TRUE),
 ('Emtinan_Maji', 'emtinanmaji@gmail.com', '5476980', 'KSA', 'profile.jpg', TRUE, TRUE);
+('nouir Alosaimi', 'nouir@gmail.com', '8888', 'KSA', 'profile.jpg', TRUE, TRUE);
 
 --Update a  name column
 UPDATE users SET user_name = 'Fatima'
     WHERE user_email = 'fafmoh@gmail.com';
+    --uuid-ossp
+    SELECT * FROM pg_extension WHERE extname ='uuid-ossp';
+    CREATE EXTENSION "uuid-ossp";
+ -- update datatype to uuid 
+ALTER TABLE users
+DROP COLUMN user_id;
 
+ALTER Table users
+ADD user_id UUID PRIMARY KEy DEFAULT uuid_generate_v4();
 --Read USER Table
 SELECT * FROM users;
 
@@ -60,7 +70,8 @@ DELETE FROM users
 CREATE TABLE orders(
     order_id SERIAL PRIMARY KEY,
     order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    order_status VARCHAR(30) NOT NULL,
+    order_status VARCHAR(20) DEFAULT 'Pending',
+    user_id uuid, CONSTRAINT fk_users FOREIGN KEY(user_id) REFERENCES users(user_id), --update foreIgn key datatype (int to uuid)
     order_total INT NOT NULL,
     user_id INT, 
     FOREIGN KEY(User_id) REFERENCES Users(User_id)
