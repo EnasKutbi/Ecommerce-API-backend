@@ -47,19 +47,19 @@ VALUES
 ('nouir Alosaimi', 'nouir@gmail.com', '8888', 'KSA', 'profile.jpg', TRUE, TRUE);
 
 --Update a  name column
-UPDATE users SET user_name = 'Fatima'
+    UPDATE users SET user_name = 'Fatima'
     WHERE user_email = 'fafmoh@gmail.com';
-    --uuid-ossp
+--uuid-ossp
     SELECT * FROM pg_extension WHERE extname ='uuid-ossp';
     CREATE EXTENSION "uuid-ossp";
  -- update datatype to uuid 
-ALTER TABLE users
-DROP COLUMN user_id;
+    ALTER TABLE users
+    DROP COLUMN user_id;
 
-ALTER Table users
-ADD user_id UUID PRIMARY KEy DEFAULT uuid_generate_v4();
+    ALTER Table users
+    ADD user_id UUID PRIMARY KEy DEFAULT uuid_generate_v4();
 --Read USER Table
-SELECT * FROM users;
+    SELECT * FROM users;
 
 --Delete from user
 DELETE FROM users
@@ -73,8 +73,6 @@ CREATE TABLE orders(
     order_status VARCHAR(20) DEFAULT 'Pending',
     user_id uuid, CONSTRAINT fk_users FOREIGN KEY(user_id) REFERENCES users(user_id), --update foreIgn key datatype (int to uuid)
     order_total INT NOT NULL,
-    user_id INT, 
-    FOREIGN KEY(User_id) REFERENCES Users(User_id)
 );
 
 
@@ -84,13 +82,13 @@ ADD product_id INT[];
 
 
 --Insert Orders
-INSERT INTO orders(order_status, order_total, user_id)
+INSERT INTO orders(order_status, order_total)
 VALUES
-('Processing', 63, 1),
-('Canceled', 222, 2),
-('Pending', 57, 3),
-('Pending', 88, 4),
-('Processing', 92, 5);
+('Processing', 63),
+('Canceled', 222),
+('Pending', 57),
+('Pending', 88),
+('Processing', 92);
  
  -- Read Orders Table
  SELECT * FROM orders;
@@ -111,7 +109,7 @@ VALUES
 
 
 -- Insert order_item
-INSERT INTO order_item(quantity, order_id, product_id)
+INSERT INTO order_item(quantity, order_id)
 VALUES
 (2,1,1011);
 (5,2,1022);
@@ -134,7 +132,7 @@ INNER JOIN products ON order_item.product_id = products.product_id;
 --nouir && Enas
 --create product table
 CREATE TABLE products(
-    product_id SERIAL PRIMARY KEY,
+    product_id  SERIAL PRIMARY KEY ,
     product_name varchar(50) NOT NULL,
     product_slug VARCHAR(100) UNIQUE NOT NULL,
     product_image VARCHAR(100),
