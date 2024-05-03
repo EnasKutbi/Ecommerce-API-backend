@@ -11,6 +11,8 @@ namespace api.Model
         [Required] // validation
         public Guid OrderId { get; set; }
         [Required]
+        public Guid UserId { get; set; }
+        [Required]
         public required string OrderStatus { get; set; }
         [Required]
         public int OrderTotal { get; set; }
