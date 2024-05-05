@@ -28,7 +28,7 @@ namespace src.Controllers
                 }
                 else
                 {
-                    return Ok(new SuccessResponse<IEnumerable<User>> { Success = true, Message = "all users are returned successfully", data = users });
+                    return Ok(new SuccessResponse<IEnumerable<User>> { Success = true, Message = "all users are returned successfully", Data = users });
                 }
             }
             catch (Exception ex)
@@ -121,7 +121,7 @@ namespace src.Controllers
                 }
                 else
                 {
-                    return Ok(new SuccessResponse<User> { Success = true, Message = "user is deleted successfully", Data = user });
+                    return Ok(new SuccessResponse<User> { Success = true, Message = "user is deleted successfully" });
                 }
             }
             catch (Exception ex)
