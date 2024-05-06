@@ -1,4 +1,4 @@
-namespace src.Helpers
+namespace api.Helpers
 {
     public class Slug 
     {
