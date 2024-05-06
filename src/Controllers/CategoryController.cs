@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace src.Controllers
 {
     [ApiController]
-    [Route("/src/categories")]
+    [Route("/api/categories")]
     public class CategoryController : ControllerBase
     {
         private readonly CategoryService _categoryService;
@@ -41,15 +41,11 @@ namespace src.Controllers
         }
 
         [HttpGet("{categoryId}")]
-        public async Task<IActionResult> GetCategory(string categoryId)
+        public async Task<IActionResult> GetCategory(Guid categoryId)
         {
             try
             {
-                if (!Guid.TryParse(categoryId, out Guid categoryIdGuid))
-                {
-                    return BadRequest("Invalid category ID Format");
-                }
-                var category = await _categoryService.GetCategoryById(categoryIdGuid);
+                var category = await _categoryService.GetCategoryById(categoryId);
                 if (category == null)
                 {
                     return NotFound(new ErrorResponse { Message = $"There is no category found with ID : {categoryId}" });
@@ -94,15 +90,12 @@ namespace src.Controllers
 
 
         [HttpPut("{categoryId}")]
-        public async Task<IActionResult> UpdateCategory(string categoryId, Category updateCategory)
+        public async Task<IActionResult> UpdateCategory(Guid categoryId, Category updateCategory)
         {
             try
             {
-                if (!Guid.TryParse(categoryId, out Guid categoryIdGuid))
-                {
-                    return BadRequest("Invalid category ID Format");
-                }
-                var category = await _categoryService.UpdateCategoryService(categoryIdGuid, updateCategory);
+                
+                var category = await _categoryService.UpdateCategoryService(categoryId, updateCategory);
                 if (category == null)
                 {
                     return NotFound(new ErrorResponse { Message = "There is no category found to update." });
@@ -122,15 +115,11 @@ namespace src.Controllers
 
 
         [HttpDelete("{categoryId}")]
-        public async Task<IActionResult> DeleteCategory(string categoryId)
+        public async Task<IActionResult> DeleteCategory(Guid categoryId)
         {
             try
             {
-                if (!Guid.TryParse(categoryId, out Guid categoryIdGuid))
-                {
-                    return BadRequest("Invalid category ID Format");
-                }
-                var result = await _categoryService.DeleteCategoryService(categoryIdGuid);
+                var result = await _categoryService.DeleteCategoryService(categoryId);
                 if (!result)
                 {
                     return NotFound(new ErrorResponse { Message = $"The category with ID : {categoryId} is not found to be deleted" });
