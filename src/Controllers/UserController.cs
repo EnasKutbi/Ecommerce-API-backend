@@ -2,15 +2,19 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using api.EntityFramework;
+using api.Model;
+using api.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace src.Controllers
+namespace api.Controllers
 {
     [ApiController]
-    [Route("/src/users")]
+    [Route("api/users")]
     public class UserController : ControllerBase
     {
         private readonly UserService _userService;
+
         public UserController()
         {
             _userService = new UserService();
@@ -22,18 +26,18 @@ namespace src.Controllers
             try
             {
                 var users = await _userService.GetAllUsersService();
-                if (users.ToList().Count < 1)
+                if (users.Count() < 1)
                 {
-                    return NotFound(new ErrorResponse { Success = false, Message = "There is no users to display" });
+                    return NotFound(new ErrorResponse { Success = false, Message = "There are no users to display" });
                 }
                 else
                 {
-                    return Ok(new SuccessResponse<IEnumerable<User>> { Success = true, Message = "all users are returned successfully", Data = users });
+                    return Ok(new SuccessResponse<IEnumerable<User>> { Success = true, Message = "All users are returned successfully", Data = users });
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"An error occurred here when tried get all users");
+                Console.WriteLine("An error occurred when trying to get all users");
                 return StatusCode(500, new ErrorResponse { Message = ex.Message });
             }
         }
@@ -45,8 +49,9 @@ namespace src.Controllers
             {
                 if (!Guid.TryParse(userId, out Guid userIdGuid))
                 {
-                    return BadRequest("Invalid user ID Format");
+                    return BadRequest("Invalid user ID format");
                 }
+
                 var user = await _userService.GetUserById(userIdGuid);
                 if (user == null)
                 {
@@ -54,12 +59,12 @@ namespace src.Controllers
                 }
                 else
                 {
-                    return Ok(new SuccessResponse<User> { Success = true, Message = "user is returned successfully", Data = user });
+                    return Ok(new SuccessResponse<User> { Success = true, Message = "User is returned successfully", Data = user });
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"An error occurred here when tried get user");
+                Console.WriteLine("An error occurred when trying to get a user");
                 return StatusCode(500, new ErrorResponse { Success = false, Message = ex.Message });
             }
         }
@@ -74,7 +79,7 @@ namespace src.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"user can not be created");
+                Console.WriteLine("User cannot be created");
                 return StatusCode(500, new ErrorResponse { Success = false, Message = ex.Message });
             }
         }
@@ -86,8 +91,9 @@ namespace src.Controllers
             {
                 if (!Guid.TryParse(userId, out Guid userIdGuid))
                 {
-                    return BadRequest("Invalid user ID Format");
+                    return BadRequest("Invalid user ID format");
                 }
+
                 var user = await _userService.UpdateUserService(userIdGuid, updateUser);
                 if (user == null)
                 {
@@ -95,12 +101,12 @@ namespace src.Controllers
                 }
                 else
                 {
-                    return Ok(new SuccessResponse<User> { Success = true, Message = "user is updated successfully", Data = user });
+                    return Ok(new SuccessResponse<User> { Success = true, Message = "User is updated successfully", Data = user });
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"user can not be updated");
+                Console.WriteLine("User cannot be updated");
                 return StatusCode(500, new ErrorResponse { Success = false, Message = ex.Message });
             }
         }
@@ -112,8 +118,9 @@ namespace src.Controllers
             {
                 if (!Guid.TryParse(userId, out Guid userIdGuid))
                 {
-                    return BadRequest("Invalid user ID Format");
+                    return BadRequest("Invalid user ID format");
                 }
+
                 var result = await _userService.DeleteUserService(userIdGuid);
                 if (!result)
                 {
@@ -121,12 +128,12 @@ namespace src.Controllers
                 }
                 else
                 {
-                    return Ok(new SuccessResponse<User> { Success = true, Message = "user is deleted successfully" });
+                    return Ok(new SuccessResponse<User> { Success = true, Message = "User is deleted successfully" });
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"user can not be deleted");
+                Console.WriteLine("User cannot be deleted");
                 return StatusCode(500, new ErrorResponse { Success = false, Message = ex.Message });
             }
         }
