@@ -43,19 +43,14 @@ namespace api.Controllers
         }
 
         [HttpGet("{userId}")]
-        public async Task<IActionResult> GetUser(string userId)
+        public async Task<IActionResult> GetUser(Guid userId)
         {
             try
             {
-                if (!Guid.TryParse(userId, out Guid userIdGuid))
-                {
-                    return BadRequest("Invalid user ID format");
-                }
-
-                var user = await _userService.GetUserById(userIdGuid);
+                var user = await _userService.GetUserById(userId);
                 if (user == null)
                 {
-                    return NotFound(new ErrorResponse { Success = false, Message = "No user found" });
+                    return NotFound(new ErrorResponse { Success = false, Message = $"user with ID: {userId} not found" });
                 }
                 else
                 {
@@ -75,7 +70,10 @@ namespace api.Controllers
             try
             {
                 var createdUser = await _userService.CreateUserService(newUser);
-                return CreatedAtAction(nameof(GetUser), new { userId = createdUser.UserId }, createdUser);
+                if (createdUser != null)
+                {
+                    return CreatedAtAction(nameof(GetUser), new { userId = createdUser.UserId }, createdUser);
+                }
             }
             catch (Exception ex)
             {

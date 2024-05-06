@@ -27,7 +27,7 @@ namespace api.Controllers
                     return NotFound(new ErrorResponse { Message = "There is no categories to display" });
                 }else{
                     return Ok(new SuccessResponse<IEnumerable<Category>>{
-                    Message = "Categories are returned succeefully",
+                    Message = "Categories are returned successfully",
                     Data = categories
                 });
                 }
@@ -55,7 +55,7 @@ namespace api.Controllers
                 else
                 {
                     return Ok(new SuccessResponse<Category>{
-                    Message = "Category is returned succeefully",
+                    Message = "Category is returned successfully",
                     Data = category
                     });
                 }
@@ -78,7 +78,7 @@ namespace api.Controllers
                     return CreatedAtAction(nameof(GetCategory), new { categoryId = createdCategory.CategoryId }, createdCategory);
                 }else{
                     return Ok(new SuccessResponse<Category>{
-                    Message = "Category is created succeefully",
+                    Message = "Category is created successfully",
                     Data = createdCategory
                 });
                 }
