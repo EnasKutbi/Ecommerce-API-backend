@@ -7,76 +7,82 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 
-namespace api.Controllers
-{
+namespace api.EntityFramework{
 
         [Route("api/products")]
         [ApiController]
         public class ProductController : ControllerBase{
         private readonly ProductService _productService;
-        public ProductController()
+        public ProductController(AppDbContext appDbContext)
             {
-                _productService=new ProductService() ;
+                _productService=new ProductService(appDbContext) ;
             }
-        
-        [HttpGet]
-        public IActionResult GetAllProducts()
-        {
-            var products  = _productService.GetAllProduct();
-            return Ok(products);
-        }
-        [HttpGet("{productId}")]
-        public IActionResult GetProductById(string productId)
-        {
-            if(!Guid.TryParse(productId, out Guid Id )){
-                return BadRequest("Invalid product id format");
 
+
+            [HttpGet]
+        public IActionResult GetProducts()
+        {
+            try{
+            var products  = _productService.GetProducts();
+            return Ok(new SuccessResponse<List<Product>>{
+                    Success=true,
+                    Message="product are return successfully",
+                    Data=products
+                });}
+            catch(Exception e)
+            {
+                Console.WriteLine("an error occured here when tried to get all products");
+                return StatusCode(500,new ErrorResponse{
+                Message = e.Message,
+                Success=false,
+            });
             }
-            var product  = _productService.GetProductById(Id);
-            if(product == null){
-                return NotFound();
-            }else{
-                return Ok(product);
-            }
+
         }
         [HttpPost]
         public IActionResult PostProduct(Product newProduct){
-            var newProducts=_productService.CreateNewProduct(newProduct);
-            return CreatedAtAction (nameof (GetProductById), new{ Id =newProducts.Id});   
-        }
+            
+            try
+            {
+                 var newProducts=_productService.CreateNewProduct(newProduct);
+                return Ok(newProducts);
+            }
+            catch (Exception ex){
+                return StatusCode(500,ex.Message);
+            }
 
-        [HttpPut ("{productId}")]
+            }
+            [HttpPut ("{productId}")]
 
-        public IActionResult UpdatepProduct(string productId, Product updateProduct){
+        public IActionResult UpdatepProduct(string productId, ProductModule updateProduct){
         if (!Guid. TryParse(productId, out Guid Id))
 
         return BadRequest("Invalid user ID Format");
 
-        var product =  _productService.UpdateProduct(Id, updateProduct);
+        try
+          {
+            _productService.Updatedproductd(Id,updateProduct);
+             return Ok("product Update successfully");
+          }
+             catch (Exception ex){
 
-        if (product == null)
-        {
-            return NotFound();
-        }
-        return Ok(product);
-        }
+                   return StatusCode(500,ex.Message);
+            }
         
-        [HttpDelete ("{productId}")]
+         } 
+         [HttpDelete ("{productId}")]
 
         public IActionResult deleteProduct(string productId){
         if(!Guid.TryParse(productId, out Guid Id ))
         {
         return BadRequest("Invalid product id format");
         }
-        var res = _productService.deleteProductById(Id);
+        var res = _productService.deleteProduct(Id);
         if(!res){
             return NotFound();
         }
-            return NoContent();
-        }
+            return Ok(res);
+        } 
+        }}
+
         
-        }  }
-   
-    
-        
-    
