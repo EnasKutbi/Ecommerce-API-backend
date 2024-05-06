@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using api.Model;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
@@ -45,6 +46,7 @@ namespace api.Controllers
         {
             try
             {
+                
                 var category = await _categoryService.GetCategoryById(categoryId);
                 if (category == null)
                 {
@@ -119,6 +121,7 @@ namespace api.Controllers
         {
             try
             {
+                
                 var result = await _categoryService.DeleteCategoryService(categoryId);
                 if (!result)
                 {

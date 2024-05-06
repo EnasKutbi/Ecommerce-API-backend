@@ -1,4 +1,6 @@
-using src.Helpers;
+
+using api.Helpers;
+using api.Model;
 
 public class CategoryService
 { 
