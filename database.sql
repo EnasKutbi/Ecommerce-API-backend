@@ -29,7 +29,7 @@ SELECT * FROM categories;
 --ENAS && nouir
 --Create user Table
 CREATE TABLE users(
- user_id UUID PRIMARY KEy DEFAULT uuid_generate_v4(),
+user_id UUID PRIMARY KEy DEFAULT uuid_generate_v4(),
 user_name VARCHAR(100) NOT NULL,
 user_email varchar(100) UNIQUE NOT NULL,
 user_password varchar(255) NOT NULL,
@@ -64,11 +64,11 @@ DELETE FROM users
 --ATHEER 
 -- Orders Table
 CREATE TABLE orders(
-    order_id SERIAL PRIMARY KEY,
+    order_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     order_status VARCHAR(20) DEFAULT 'Pending',
-    user_id uuid, CONSTRAINT fk_users FOREIGN KEY(user_id) REFERENCES users(user_id), --update foreIgn key datatype (int to uuid)
-    order_total INT NOT NULL,
+    user_id uuid, CONSTRAINT fk_users FOREIGN KEY(user_id) REFERENCES users(user_id),
+    order_total INT NOT NULL
 );
 
 
@@ -95,12 +95,10 @@ VALUES
  
  -- Order_Item Table
  CREATE TABLE order_item(
-    order_item SERIAL PRIMARY KEY,
+    order_item UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     quantity INT,
-    order_id INT,
-    FOREIGN KEY(order_id) REFERENCES orders(order_id),
-    product_id uuid,
-    FOREIGN KEY(product_id) REFERENCES products(product_id)
+    order_id UUID, CONSTRAINT fk_orders FOREIGN KEY(order_id) REFERENCES orders(order_id),
+    product_id UUID, CONSTRAINT fk_products FOREIGN KEY(product_id) REFERENCES products(product_id)
 );
 
 

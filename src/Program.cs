@@ -1,4 +1,3 @@
-// using api.EntityFramwork;
 using api.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,8 +23,5 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.MapControllers();
-
 app.MapControllers().WithParameterValidation();
-
 app.Run();
