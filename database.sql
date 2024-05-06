@@ -47,7 +47,7 @@ VALUES
 ('Mai_Ali', 'maiali@gmail.com', '857302', 'KSA', 'NULL', FALSE, FALSE),
 ('Fatimah_Mohamed', 'fafmoh@gmail.com', '76321', 'KSA', 'NULL', TRUE, FALSE),
 ('Enas_Kutbi', 'enaskutbi@gmail.com', '0029837', 'KSA', 'USER.JPG', TRUE, TRUE),
-('Emtinan_Maji', 'emtinanmaji@gmail.com', '5476980', 'KSA', 'profile.jpg', TRUE, TRUE);
+('Emtinan_Maji', 'emtinanmaji@gmail.com', '5476980', 'KSA', 'profile.jpg', TRUE, TRUE),
 ('nouir Alosaimi', 'nouir@gmail.com', '8888', 'KSA', 'profile.jpg', TRUE, TRUE);
 
 --Update a  name column
@@ -141,11 +141,11 @@ CREATE TABLE products(
 --insert product
 INSERT INTO products(product_name, product_slug, product_image, product_description, product_price, product_quantity, product_sold, shipping, createdAt)
 VALUES
-('iphone14 pro max', 'iphone14-pro-max', 'iphone14.png', '128GB BLACK COLOR 6.1 INCHES',3000.99, 30, 5, 1, 3, NOW()),
+('iphone14 pro max', 'iphone14-pro-max', 'iphone14.png', '128GB BLACK COLOR 6.1 INCHES',3000.99, 30, 5, 3, NOW()),
 ('iphone watch', 'iphone-watch', 'iphone_watch.png', 'New Apple Watch SE (2nd Gen, 2023) [GPS + Cellular 40mm] Smartwatch with Starlight Aluminum Case with Starlight Sport Band S/M. Fitness & Sleep Tracker', 1049.00, 50, 10, 1, NOW()),
 ('usb-c to Lightning Adapter', 'usb-c-to-Lightning-Adapter', 'usb-ctoLightningAdapter.JPG', 'The Apple 20W USB‑C Power Adapter offers fast, efficient charging at home, in the office, or on the go. Pair it with iPhone 8 or later for fast charging — 50 percent battery in around 30 minutes.¹ Or pair it with the iPad Pro and iPad Air for optimal charging performance. Compatible with any USB-C enabled device.',29, 100, 10, 2,  NOW()),
 ('iphone charger', 'iphone-charger', 'iphone_charger.png', 'The Apple 20W USB‑C Power Adapter offers fast, efficient charging at home, in the office, or on the go. Pair it with iPhone 8 or later for fast charging — 50 percent battery in around 30 minutes.¹ Or pair it with the iPad Pro and iPad Air for optimal charging performance. Compatible with any USB-C enabled device.', 39, 40, 5, 4,  NOW()),
-('Elevation Lab GoStand Adjustable Stand for iphone', 'Elevation-Lab-GoStand-Adjustable-Stand-for-iphone', 'Elevation.JPG', 'ElevationLab GoStand is the adjustable, lightweight stand for iPhone. The clever design lets you position your screen at a wide range of angles and folds flat to fit in your pocket. It features premium composite and silicone construction with a steel hinge. Precision indexable back support adjusts with a low-profile button. Perfect for streaming Apple Fitness+ workouts, travel, group video, watching movies, gaming, and more', 75.95, 66, 12,  NOW()),
+('Elevation Lab GoStand Adjustable Stand for iphone', 'Elevation-Lab-GoStand-Adjustable-Stand-for-iphone', 'Elevation.JPG', 'ElevationLab GoStand is the adjustable, lightweight stand for iPhone. The clever design lets you position your screen at a wide range of angles and folds flat to fit in your pocket. It features premium composite and silicone construction with a steel hinge. Precision indexable back support adjusts with a low-profile button. Perfect for streaming Apple Fitness+ workouts, travel, group video, watching movies, gaming, and more', 75.95, 66, 12, 20, NOW()),
 ('Mophie powerstation', 'Mophie-powerstation', 'Mophie.PNG', 'The mophie powerstation provides fast, portable power with dual USB-C PD ports. That means you can charge two devices at once. Get up to 43 extra hours of power.* Tuck the compact powerstation in your bag, and you are ready for any power demands the day throws at you', 300, 40, 2, 0,  NOW());
 
 --READ 

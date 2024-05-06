@@ -4,10 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
-namespace src.Controllers
+namespace api.Controllers
 {
     [ApiController]
-    [Route("/src/categories")]
+    [Route("/api/categories")]
     public class CategoryController : ControllerBase
     {
         private readonly CategoryService _categoryService;
