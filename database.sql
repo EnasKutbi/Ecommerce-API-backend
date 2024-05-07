@@ -68,13 +68,9 @@ CREATE TABLE orders(
     order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     order_status VARCHAR(20) DEFAULT 'Pending',
     user_id uuid, CONSTRAINT fk_users FOREIGN KEY(user_id) REFERENCES users(user_id),
+    --product_id uuid, CONSTRAINT fk_products FOREIGN KEY(product_id) REFERENCES products(product_id),
     order_total INT NOT NULL
 );
-
-
--- Add a product_id column
-ALTER TABLE orders
-ADD product_id INT[];
 
 
 --Insert Orders

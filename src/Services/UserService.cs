@@ -4,9 +4,55 @@ using System.Linq;
 using System.Threading.Tasks;
 using api.EntityFramework;
 using api.Model;
+using api.Models;
+using Microsoft.EntityFrameworkCore;
 
-namespace api.Services;
+namespace api.Services{
+    public class UserService
+    {
+        private readonly AppDbContext _appDbContext;
+        public UserService(AppDbContext appDbContext){
+            _appDbContext = appDbContext;
+        }
+        public async Task<List<User>> GetAllUsersService(){
+            await Task.CompletedTask;
+            return _appDbContext.Users.Include(u => u.Orders).ToList();
+        }
 
+        public void CreateUser(UserModel newUser)
+        {
+            User user = new User{
+                UserId = newUser.UserId,
+                Name = newUser.Name,
+                Email = newUser.Email,
+                Password = newUser.Password,
+                Address = newUser.Address,
+                Image = newUser.Image,
+                IsAdmin = newUser.IsAdmin,
+                IsBanned = newUser.IsBanned,
+                CreatedAt = DateTime.Now,
+                Orders = [
+                    new Order{
+                        OrderId = newUser.Orders[0].OrderId,
+                        UserId = newUser.Orders[0].User.UserId,
+                        OrderStatus = newUser.Orders[0].OrderStatus,
+                        OrderTotal = newUser.Orders[0].OrderTotal,
+                        OrderDate = DateTime.Now,
+                    }
+                ]
+            };
+            _appDbContext.Users.Add(user); // add record
+            _appDbContext.SaveChanges();
+        }
+    }
+}
+
+
+
+
+
+
+    /*
     public class UserService
     {
         public static List<User> _users = new List<User>() {
@@ -91,3 +137,4 @@ namespace api.Services;
             return false;
         }
     }
+    */
