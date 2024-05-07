@@ -9,7 +9,9 @@ namespace api.EntityFramework
 {
     public class AppDbContext : DbContext {
         public AppDbContext(DbContextOptions options) : base(options) {} // Not Added yet but needed in connection
+        public DbSet <User> Users { get; set; }
         public DbSet <Order> Orders { get; set; }
+        public DbSet<Category> Categories { get; set; }
         protected override void OnModelCreating(ModelBuilder builder) {}
     }
 }

@@ -2,9 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-public class UserService
-{
-    public static List<User> _users = new List<User>() {
+using api.EntityFramework;
+using api.Model;
+
+namespace api.Services;
+
+    public class UserService
+    {
+        public static List<User> _users = new List<User>() {
         new User{
             UserId = Guid.Parse("75424b9b-cbd4-49b9-901b-056dd1c6a020"),
             Name = "John Doe",
@@ -37,52 +42,52 @@ public class UserService
         }
     };
 
-    public async Task<IEnumerable<User>> GetAllUsersService()
-    {
-        await Task.CompletedTask; // Simulate an asynchronous operation without delay
-        return _users.AsEnumerable();
-    }
-
-    public Task<User?> GetUserById(Guid userId)
-    {
-        return Task.FromResult(_users.Find(user => user.UserId == userId));
-    }
-
-    public async Task<User> CreateUserService(User newUser)
-    {
-        await Task.CompletedTask; // Simulate an asynchronous operation without delay
-        newUser.UserId = Guid.NewGuid();
-        newUser.CreatedAt = DateTime.Now;
-        _users.Add(newUser); // store this user in our database
-        return newUser;
-    }
-
-    public async Task<User?> UpdateUserService(Guid userId, User updateUser)
-    {
-        await Task.CompletedTask; // Simulate an asynchronous operation without delay
-        var existingUser = _users.FirstOrDefault(u => u.UserId == userId);
-        if (existingUser != null)
+        public async Task<IEnumerable<User>> GetAllUsersService()
         {
-            existingUser.Name = updateUser.Name;
-            existingUser.Email = updateUser.Email;
-            existingUser.Password = updateUser.Password;
-            existingUser.Address = updateUser.Address;
-            existingUser.Image = updateUser.Image;
-            existingUser.IsAdmin = updateUser.IsAdmin;
-            existingUser.IsBanned = updateUser.IsBanned;
+            await Task.CompletedTask; // Simulate an asynchronous operation without delay
+            return _users.AsEnumerable();
         }
-        return existingUser;
-    }
 
-    public async Task<bool> DeleteUserService(Guid userId)
-    {
-        await Task.CompletedTask; // Simulate an asynchronous operation without delay
-        var userToRemove = _users.FirstOrDefault(u => u.UserId == userId);
-        if (userToRemove != null)
+        public Task<User?> GetUserById(Guid userId)
         {
-            _users.Remove(userToRemove);
-            return true;
+            return Task.FromResult(_users.Find(user => user.UserId == userId));
         }
-        return false;
+
+        public async Task<User> CreateUserService(User newUser)
+        {
+            await Task.CompletedTask; // Simulate an asynchronous operation without delay
+            newUser.UserId = Guid.NewGuid();
+            newUser.CreatedAt = DateTime.Now;
+            _users.Add(newUser); // store this user in our database
+            return newUser;
+        }
+
+        public async Task<User?> UpdateUserService(Guid userId, User updateUser)
+        {
+            await Task.CompletedTask; // Simulate an asynchronous operation without delay
+            var existingUser = _users.FirstOrDefault(u => u.UserId == userId);
+            if (existingUser != null)
+            {
+                existingUser.Name = updateUser.Name;
+                existingUser.Email = updateUser.Email;
+                existingUser.Password = updateUser.Password;
+                existingUser.Address = updateUser.Address;
+                existingUser.Image = updateUser.Image;
+                existingUser.IsAdmin = updateUser.IsAdmin;
+                existingUser.IsBanned = updateUser.IsBanned;
+            }
+            return existingUser;
+        }
+
+        public async Task<bool> DeleteUserService(Guid userId)
+        {
+            await Task.CompletedTask; // Simulate an asynchronous operation without delay
+            var userToRemove = _users.FirstOrDefault(u => u.UserId == userId);
+            if (userToRemove != null)
+            {
+                _users.Remove(userToRemove);
+                return true;
+            }
+            return false;
+        }
     }
-}
