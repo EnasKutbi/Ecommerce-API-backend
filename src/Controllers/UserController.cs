@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using api.EntityFramework;
 using api.Model;
+using api.Models;
 using api.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,9 +16,9 @@ namespace api.Controllers
     {
         private readonly UserService _userService;
 
-        public UserController()
+        public UserController(AppDbContext appDbContext)
         {
-            _userService = new UserService();
+            _userService = new UserService(appDbContext);
         }
 
         [HttpGet]
@@ -42,6 +43,21 @@ namespace api.Controllers
             }
         }
 
+        [HttpPost]
+        public IActionResult CreateUser(UserModel newUser)
+        {
+            try
+            {
+                _userService.CreateUser(newUser);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("User cannot be created");
+                return StatusCode(500, new ErrorResponse { Success = false, Message = ex.Message });
+            }
+        }
+/*
         [HttpGet("{userId}")]
         public async Task<IActionResult> GetUser(string userId)
         {
@@ -136,6 +152,6 @@ namespace api.Controllers
                 Console.WriteLine("User cannot be deleted");
                 return StatusCode(500, new ErrorResponse { Success = false, Message = ex.Message });
             }
-        }
+        }*/
     }
 }

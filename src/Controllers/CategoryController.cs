@@ -48,7 +48,7 @@ namespace api.Controllers
             try
             {
                 
-                var category = await _categoryService.GetCategoryById(categoryId);
+                var category= await _categoryService.GetCategoryById(categoryId);
                 if (category == null)
                 {
                     return NotFound(new ErrorResponse { Message = $"There is no category found with ID : {categoryId}" });
