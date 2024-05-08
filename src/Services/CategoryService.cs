@@ -14,7 +14,7 @@ public class CategoryService
 
     public async Task<IEnumerable<Category>> GetAllCategoryService()
     {
-        return await _appDbContext.Categories.ToListAsync();
+        return await _appDbContext.Categories.Include(category => category.Products).ToListAsync();
     }
     public async Task<Category?> GetCategoryById(Guid categoryId)
     {

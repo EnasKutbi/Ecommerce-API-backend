@@ -48,12 +48,14 @@ namespace api.EntityFramework
                 entity.Property(p => p.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
                 //relationship
                 // entity.HasMany(c => c.Products).WithOne(P =>P.Category).HasForeignKey(p => p.CategoryId);
+                
 
              });
+        }
 
 
-        public DbSet<Category> Categories { get; set; }
-        protected override void OnModelCreating(ModelBuilder builder) {
+        
+        //protected override void OnModelCreating(ModelBuilder builder) {   هذا اللاين موجود فوق مايحتاج تكرري احذفي وحطي كودك فوق
             /* sitting rules by Fluent API
             builder.Entity<Order>().HasKey(o => o.OrderId); // 1st role, check PK
             builder.Entity<Order>().Property(o => o.OrderId).IsRequired().ValueGeneratedOnAdd(); // Generated from DB
@@ -61,7 +63,7 @@ namespace api.EntityFramework
             builder.Entity<Order>().Property(o => o.OrderTotal).IsRequired();
             builder.Entity<Order>().Property(o => o.OrderDate).IsRequired().HasDefaultValueSql("CURRENT_TIMESTAMPS");
             */
-            builder.Entity<User>().HasMany(u => u.Orders).WithOne(o => o.User).HasForeignKey(o => o.UserId);
-        }
+            //builder.Entity<User>().HasMany(u => u.Orders).WithOne(o => o.User).HasForeignKey(o => o.UserId);
+        //}
     }
 }
