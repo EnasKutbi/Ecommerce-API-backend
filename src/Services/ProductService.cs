@@ -1,13 +1,11 @@
+using System;
 using System.Collections.Generic;
-
 using System.Linq;
-
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
+using api.EntityFramework;
+using api.Model;
 
-
-namespace api.EntityFramework{
+namespace api.Service{
 
 public class ProductService{
 
@@ -51,10 +49,11 @@ private AppDbContext  appDbContext;
         productUpdated.Quantity=updatpoduct.Quantity;
         productUpdated.Sold=updatpoduct.Sold ;
         productUpdated.Shipping=updatpoduct.Shipping;
-        productUpdated.category_id = updatpoduct.category_id ;
+        productUpdated.CategoryId = updatpoduct.CategoryId ;
 
-        appDbContext.SaveChanges();
+        
     }
+    appDbContext.Save();
 
         
          

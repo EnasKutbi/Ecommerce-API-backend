@@ -1,13 +1,13 @@
-using System.Collections.Generic;
-
-using System.Linq;
-
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http.HttpResults;
+// using System;
+// using System.Collections.Generic;
+// using System.Linq;
+// using System.Threading.Tasks;
+// using api.EntityFramework;
+// using api.Model;
+// using api.Service;
 using Microsoft.AspNetCore.Mvc;
 
-
-namespace api.EntityFramework{
+namespace api.Controller{
 
         [Route("api/products")]
         [ApiController]

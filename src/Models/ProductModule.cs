@@ -7,7 +7,7 @@ namespace api.EntityFramework
  {
 public class ProductModule{
 
-    public Guid Id { get; set;}
+    public Guid Id { get; set;} 
     [Required(ErrorMessage = "Product name is required!")]
     [MinLength(5, ErrorMessage = "product name must be at least 5 characters long.")]
     [MaxLength(50, ErrorMessage = "product name must be at  50 characters long.")]
@@ -20,8 +20,8 @@ public class ProductModule{
     public  int Quantity { get; set;}
     public  int Sold{ get; set;}
     public double Shipping { get; set;}
-    public Guid category_id{ get; set;}
-    // public CategoryModule category { get; set;}
+    public Guid CategoryId{ get; set;}
+    public Category category { get; set;}
     public DateTime CreatedAt {get; set;}}}
 
 
