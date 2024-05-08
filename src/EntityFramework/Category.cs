@@ -25,7 +25,7 @@ namespace api.EntityFramework
 
         [Column("created_at")]
         public DateTime CreatedAt { get; set; }
-  
+        public List<Product>  Products { get; set; }
     }
     
 }

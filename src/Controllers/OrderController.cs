@@ -24,9 +24,9 @@ namespace api.Controller
                 var orders = _orderService.GetAllOrders();
                 return Ok(orders);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                 return BadRequest(e.Message);
+                 return BadRequest(ex.Message);
             }
         }
         [HttpPost]
@@ -36,9 +36,9 @@ namespace api.Controller
                 _orderService.PostOrder(newOrder);
                 return Ok("Order Created Successfully");
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                 return BadRequest(e.Message);
+                 return BadRequest(ex.Message);
             }
         }
         [HttpPut("{orderId}")]
@@ -48,9 +48,9 @@ namespace api.Controller
                 _orderService.PutOrder(orderId, putorder);
                 return Ok("Order Updated Successfully");
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                 return BadRequest(e.Message);
+                 return BadRequest(ex.Message);
             }
         }
         [HttpDelete("{orderId}")]
@@ -60,9 +60,9 @@ namespace api.Controller
                 _orderService.DeleteOrder(orderId);
                 return Ok("Order Created Successfully");
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                 return BadRequest(e.Message);
+                 return BadRequest(ex.Message);
             }
         }
     }

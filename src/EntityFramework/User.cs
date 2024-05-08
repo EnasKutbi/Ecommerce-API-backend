@@ -29,5 +29,6 @@ namespace api.EntityFramework
         public bool IsBanned { get; set; }
 
         public DateTime CreatedAt { get; set; }
+        public List<Order> Orders { get; set;} // By Atheer
     }
 }
