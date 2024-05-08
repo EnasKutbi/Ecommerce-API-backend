@@ -2,7 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using api.Model;
+using api.EntityFramework;
+using api.Service;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
@@ -12,9 +13,9 @@ namespace api.Controllers
     public class CategoryController : ControllerBase
     {
         private readonly CategoryService _categoryService;
-        public CategoryController()
+        public CategoryController(AppDbContext appDbContext)
         {
-            _categoryService = new CategoryService();
+            _categoryService = new CategoryService(appDbContext);
         }
 
         [HttpGet]
