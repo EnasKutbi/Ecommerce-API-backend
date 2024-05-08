@@ -19,6 +19,7 @@ namespace api.Service
             datalist.ForEach(row => orders.Add(new OrderModel {
                 OrderId = row.OrderId,
                 UserId = row.UserId,
+                //ProductId = row.ProductId,
                 OrderStatus = row.OrderStatus,
                 OrderTotal = row.OrderTotal,
                 OrderDate = DateTime.Now,
@@ -29,6 +30,7 @@ namespace api.Service
             var order = new Order { // create the record
                 OrderId = Guid.NewGuid(),
                 UserId = newOrder.UserId,
+                //ProductId = row.ProductId,
                 OrderStatus = newOrder.OrderStatus,
                 OrderTotal = newOrder.OrderTotal,
                 OrderDate = DateTime.Now,

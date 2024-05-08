@@ -12,6 +12,15 @@ namespace api.EntityFramework
         public DbSet <User> Users { get; set; }
         public DbSet <Order> Orders { get; set; }
         public DbSet<Category> Categories { get; set; }
-        protected override void OnModelCreating(ModelBuilder builder) {}
+        protected override void OnModelCreating(ModelBuilder builder) {
+            /* sitting rules by Fluent API
+            builder.Entity<Order>().HasKey(o => o.OrderId); // 1st role, check PK
+            builder.Entity<Order>().Property(o => o.OrderId).IsRequired().ValueGeneratedOnAdd(); // Generated from DB
+            builder.Entity<Order>().Property(o => o.OrderStatus).IsRequired();
+            builder.Entity<Order>().Property(o => o.OrderTotal).IsRequired();
+            builder.Entity<Order>().Property(o => o.OrderDate).IsRequired().HasDefaultValueSql("CURRENT_TIMESTAMPS");
+            */
+            builder.Entity<User>().HasMany(u => u.Orders).WithOne(o => o.User).HasForeignKey(o => o.UserId);
+        }
     }
 }

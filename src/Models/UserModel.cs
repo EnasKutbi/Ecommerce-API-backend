@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using api.Model;
 
-namespace api.Models;
+namespace api.Models{
 
     public class UserModel
     {
@@ -22,4 +23,6 @@ namespace api.Models;
         public bool IsAdmin { get; set; }
         public bool IsBanned { get; set; }
         public DateTime CreatedAt { get; set; }
+        public List<OrderModel> Orders { get; set; } // by Atheer, 1-M relation
+    }
     }
