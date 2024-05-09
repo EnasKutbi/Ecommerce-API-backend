@@ -1,8 +1,12 @@
 using System.ComponentModel.DataAnnotations;
+using api.EntityFramework;
+
+
 namespace api.Model
 {
   public class Category
   {
+    [Key]
     public Guid CategoryId { get; set; }
   
     [Required(ErrorMessage = "Category name is required")]
@@ -14,6 +18,9 @@ namespace api.Model
     [MaxLength(300, ErrorMessage = "Description can be at most 300 characters long.")]
     public string Description { get; set; } = string.Empty;
     public DateTime CreatedAt { get; set; }
+
+    // Relationships
+    public List<ProductModule> Products { get; set; } = new List<ProductModule>();
   }
 
 }
