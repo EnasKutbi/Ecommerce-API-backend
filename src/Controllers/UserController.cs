@@ -57,6 +57,35 @@ namespace api.Controllers
                 return StatusCode(500, new ErrorResponse { Success = false, Message = ex.Message });
             }
         }
+        [HttpPut("{userId}")]
+        public IActionResult UpdateUser(Guid userId, UserModel updateUser)
+        {
+            try
+            {
+                _userService.UpdateUserService(userId, updateUser);
+                return Ok("User Updated Successfully");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("User cannot be updated");
+                return StatusCode(500, new ErrorResponse { Success = false, Message = ex.Message });
+            }
+        }
+
+        [HttpDelete("{userId}")]
+        public IActionResult DeleteUser(Guid userId)
+        {
+            try
+            {
+                _userService.DeleteUserService(userId);
+                return Ok("User Deleted Successfully");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("User cannot be deleted");
+                return StatusCode(500, new ErrorResponse { Success = false, Message = ex.Message });
+            }
+        }
 /*
         [HttpGet("{userId}")]
         public async Task<IActionResult> GetUser(string userId)

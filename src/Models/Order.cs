@@ -14,8 +14,8 @@ namespace api.Model
         [Required]
         public Guid UserId { get; set; } // foreign key to users table
         public UserModel User { get; set; } // 1-1 relation
-        /*[Required]
-        public Guid ProductId { get; set; } // foreign key to products table*/
+        [Required]
+        public Guid ProductId { get; set; } // foreign key to products table
         [Required]
         public required string OrderStatus { get; set; }
         [Required]
