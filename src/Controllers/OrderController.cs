@@ -14,11 +14,13 @@ namespace api.Controller
     public class OrderController : ControllerBase
     {
         private readonly OrderService _orderService;
-        public OrderController(AppDbContext appDbContext) {
+        public OrderController(AppDbContext appDbContext)
+        {
             _orderService = new OrderService(appDbContext);
         }
         [HttpGet]
-        public IActionResult GetOrders() {
+        public IActionResult GetOrders()
+        {
             try
             {
                 var orders = _orderService.GetAllOrders();
@@ -26,11 +28,12 @@ namespace api.Controller
             }
             catch (Exception ex)
             {
-                 return BadRequest(ex.Message);
+                return BadRequest(ex.Message);
             }
         }
         [HttpPost]
-        public IActionResult PostOrder(OrderModel newOrder) {
+        public IActionResult PostOrder(OrderModel newOrder)
+        {
             try
             {
                 _orderService.PostOrder(newOrder);
@@ -38,11 +41,12 @@ namespace api.Controller
             }
             catch (Exception ex)
             {
-                 return BadRequest(ex.Message);
+                return BadRequest(ex.Message);
             }
         }
         [HttpPut("{orderId}")]
-        public IActionResult PutOrder(Guid orderId, OrderModel putorder) {
+        public IActionResult PutOrder(Guid orderId, OrderModel putorder)
+        {
             try
             {
                 _orderService.PutOrder(orderId, putorder);
@@ -50,19 +54,20 @@ namespace api.Controller
             }
             catch (Exception ex)
             {
-                 return BadRequest(ex.Message);
+                return BadRequest(ex.Message);
             }
         }
         [HttpDelete("{orderId}")]
-        public IActionResult DeleteOrder(Guid orderId) {
+        public IActionResult DeleteOrder(Guid orderId)
+        {
             try
             {
                 _orderService.DeleteOrder(orderId);
-                return Ok("Order Created Successfully");
+                return Ok("Order Deleted Successfully");
             }
             catch (Exception ex)
             {
-                 return BadRequest(ex.Message);
+                return BadRequest(ex.Message);
             }
         }
     }
