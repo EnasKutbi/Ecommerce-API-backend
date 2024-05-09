@@ -20,5 +20,8 @@ namespace api.EntityFramework
         [Required]
         public Guid ProductId { get; set; }
         public Product Product { get; set; } // get Product Entity
+
+        //Relationships
+        public List<OrderItem>? OrderItems { get; set; } // for M-M with product
     }
 }
