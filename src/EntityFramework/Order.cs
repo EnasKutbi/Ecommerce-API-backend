@@ -17,8 +17,8 @@ namespace api.EntityFramework
         [Required]
         public int OrderTotal { get; set; }
         public DateTime OrderDate { get; set; } = DateTime.UtcNow;
-        //[Required]
-        //public Guid ProductId { get; set; }
-        //public Product Product { get; set; } // get Product Entity
+        [Required]
+        public Guid ProductId { get; set; }
+        public Product Product { get; set; } // get Product Entity
     }
 }

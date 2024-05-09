@@ -63,7 +63,7 @@ namespace api.Controller
             try
             {
                 _orderService.DeleteOrder(orderId);
-                return Ok("Order Created Successfully");
+                return Ok("Order Deleted Successfully");
             }
             catch (Exception ex)
             {

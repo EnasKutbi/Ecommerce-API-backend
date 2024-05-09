@@ -22,7 +22,7 @@ namespace api.Service
             {
                 OrderId = row.OrderId,
                 UserId = row.UserId,
-                //ProductId = row.ProductId,
+                ProductId = row.ProductId,
                 OrderStatus = row.OrderStatus,
                 OrderTotal = row.OrderTotal,
                 OrderDate = DateTime.Now,
@@ -35,7 +35,7 @@ namespace api.Service
             { // create the record
                 OrderId = Guid.NewGuid(),
                 UserId = newOrder.UserId,
-                //ProductId = row.ProductId,
+                ProductId = newOrder.ProductId,
                 OrderStatus = newOrder.OrderStatus,
                 OrderTotal = newOrder.OrderTotal,
                 OrderDate = DateTime.Now,

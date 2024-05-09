@@ -48,6 +48,42 @@ namespace api.Services
             _appDbContext.Users.Add(user); // add record
             _appDbContext.SaveChanges();
         }
+
+        public void UpdateUserService(Guid userId, UserModel updateUser)
+        {
+            var existingUser = _appDbContext.Users.FirstOrDefault(u => u.UserId == userId);
+            if (existingUser != null)
+            {
+                existingUser.Name = updateUser.Name;
+                existingUser.Email = updateUser.Email;
+                existingUser.Password = updateUser.Password;
+                existingUser.Address = updateUser.Address;
+                existingUser.Image = updateUser.Image;
+                existingUser.IsAdmin = updateUser.IsAdmin;
+                existingUser.IsBanned = updateUser.IsBanned;
+                existingUser.CreatedAt = DateTime.Now;
+                existingUser.Orders = [
+                    new Order{
+                        OrderId = updateUser.Orders[0].OrderId,
+                        UserId = updateUser.Orders[0].User.UserId,
+                        OrderStatus = updateUser.Orders[0].OrderStatus,
+                        OrderTotal = updateUser.Orders[0].OrderTotal,
+                        OrderDate = DateTime.Now,
+                    }
+                ];
+            }
+            _appDbContext.SaveChanges();
+        }
+
+        public void DeleteUserService(Guid userId)
+        {
+            var userToRemove = _appDbContext.Users.FirstOrDefault(u => u.UserId == userId);
+            if (userToRemove != null)
+            {
+                _appDbContext.Users.Remove(userToRemove);
+                _appDbContext.SaveChanges();
+            }
+        }
     }
 }
 
