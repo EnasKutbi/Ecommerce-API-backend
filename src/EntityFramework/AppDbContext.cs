@@ -15,8 +15,9 @@ namespace api.EntityFramework
         public DbSet <Order> Orders { get; set; }
         public DbSet <Category> Categories { get; set; }
         public DbSet <Product> Products { get; set; }
+        public DbSet <OrderItem> OrderItems { get; set; }
         protected override void OnModelCreating(ModelBuilder builder) {
-             builder.Entity<Product>(entity=>{
+            /* builder.Entity<Product>(entity=>{
                 entity.HasKey(p => p.Id);
                 //entity.Property(p => p.Id).HasDefaultValue("uuid_generate_v4()");
 
@@ -32,29 +33,34 @@ namespace api.EntityFramework
                 entity.Property(p => p.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
                 
 
-             });
-             // --------------------Category--------------------
+             });*/
+            // --------------------Category--------------------
             builder.Entity<Category>().HasKey(c => c.CategoryId); //PK
             builder.Entity<Category>().Property(c => c.CategoryId).IsRequired().ValueGeneratedOnAdd();
 
-            builder.Entity<Category>().Property(c => c.Name).IsRequired().HasMaxLength(50);
-            builder.Entity<Category>().HasIndex(c => c.Name).IsUnique();
+            //builder.Entity<Category>().Property(c => c.Name).IsRequired().HasMaxLength(50);
+            //builder.Entity<Category>().HasIndex(c => c.Name).IsUnique();
 
-            builder.Entity<Category>().Property(c => c.Description).HasDefaultValue(string.Empty);
+            //builder.Entity<Category>().Property(c => c.Description).HasDefaultValue(string.Empty);
+            // Relationship
+            //one-to-many relationship between Product & Category
+            builder.Entity<Category>()
+            .HasMany(c => c.Products)
+            .WithOne(p => p.Category)
+            .HasForeignKey(p => p.CategoryId);
 
-            // ### one-to-many relationship between Product & Category
-            //builder.Entity<Category>()
-            //.HasMany(c => c.Products)
-            //.WithOne(p => p.Category)
-            //.HasForeignKey(p => p.CategoryId);
+            // one-to-many relationship between User & order
+            builder.Entity<Order>()
+            .HasOne(_ => _.User)
+            .WithMany(_ => _.Orders)
+            .HasForeignKey(_ => _.UserId);
+
+            builder.Entity<Order>()
+            .Property(_ => _.UserId)
+            .IsRequired();
 
 
-             // Relationship
-             // one-to-many relationship between User & order
-
-
-
-
+/*
             // one-to-many relationship between Product & Category
             builder.Entity<Product>()
             .HasOne(P=>P.Category)
@@ -71,11 +77,33 @@ namespace api.EntityFramework
                 entity.Property(p => p.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
             //relationship
             // entity.HasMany(c => c.Products).WithOne(P =>P.Category).HasForeignKey(p => p.CategoryId);
-
-
-            // many-to-many relationship between Product & order   
-
             });
+*/
+
+            // many-to-many relationship between Product & order
+
+            builder.Entity<OrderItem>()
+            .HasKey(oi => oi.OrderItemId);
+
+            builder.Entity<OrderItem>()
+            .HasOne(oi => oi.Order)
+            .WithMany(o => o.OrderItems)
+            .HasForeignKey(oi=> oi.OrderId);
+
+            builder.Entity<OrderItem>()
+            .HasOne(oi=> oi.Product)
+            .WithMany(p=> p.OrderItems)
+            .HasForeignKey(oi=>oi.ProductId);
+
+            builder.Entity<OrderItem>()
+           .Property(_ => _.Quantity)
+           .IsRequired();
+
+            builder.Entity<OrderItem>()
+            .HasIndex(_ => new { _.OrderId , _.ProductId} )
+            .IsUnique(); 
+
+            
         }
 
 

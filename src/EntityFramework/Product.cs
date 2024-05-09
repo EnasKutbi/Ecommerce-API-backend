@@ -17,5 +17,11 @@ namespace api.EntityFramework
     public double Shipping { get; set;}
     public Guid CategoryId{ get; set;}//forien  key
     public Category Category { get; set;}
-    public DateTime CreatedAt {get; set;}}}
+    public DateTime CreatedAt {get; set;}
+
+    //Relationships
+    public List<OrderItem>? OrderItems { get; set; } // for M-M with order
+    }}
+
+    
 
