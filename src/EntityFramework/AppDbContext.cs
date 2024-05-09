@@ -34,6 +34,37 @@ namespace api.EntityFramework
                 entity.Property(p => p.CategoryId);
                 entity.Property(p => p.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
 
+             });
+             // --------------------Category--------------------
+            builder.Entity<Category>().HasKey(c => c.CategoryId); //PK
+            builder.Entity<Category>().Property(c => c.CategoryId).IsRequired().ValueGeneratedOnAdd();
+
+            builder.Entity<Category>().Property(c => c.Name).IsRequired().HasMaxLength(50);
+            builder.Entity<Category>().HasIndex(c => c.Name).IsUnique();
+
+            builder.Entity<Category>().Property(c => c.Description).HasDefaultValue(string.Empty);
+
+            // ### one-to-many relationship between Product & Category
+            //builder.Entity<Category>()
+            //.HasMany(c => c.Products)
+            //.WithOne(p => p.Category)
+            //.HasForeignKey(p => p.CategoryId);
+
+
+             // Relationship
+             // one-to-many relationship between User & order
+
+
+
+
+            // one-to-many relationship between Product & Category
+            builder.Entity<Product>()
+            .HasOne(P=>P.Category)
+            .WithMany(C=>C.Products)
+            .HasForeignKey(C => C.CategoryId);
+            // .HasForeignKey(p => p.CategoryId);
+            builder.Entity<Category>(entity=>{
+
 
             });
             builder.Entity<Product>()
@@ -43,6 +74,7 @@ namespace api.EntityFramework
             //  .HasForeignKey(p => p.CategoryId);
             builder.Entity<Category>(entity =>
             {
+
                 entity.HasKey(C => C.CategoryId);
                 //entity.Property(p => p.Id).HasDefaultValue("uuid_generate_v4()");
 
@@ -50,12 +82,22 @@ namespace api.EntityFramework
                 entity.Property(C => C.Slug);
                 entity.Property(p => p.Description);
                 entity.Property(p => p.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+            //relationship
+            // entity.HasMany(c => c.Products).WithOne(P =>P.Category).HasForeignKey(p => p.CategoryId);
+
+
+            // many-to-many relationship between Product & order   
+
+            });
+
                 //relationship
                 // entity.HasMany(c => c.Products).WithOne(P =>P.Category).HasForeignKey(p => p.CategoryId);
 
 
             });
             builder.Entity<User>().HasMany(u => u.Orders).WithOne(o => o.User).HasForeignKey(o => o.UserId);
+
         }
 
 

@@ -6,7 +6,6 @@ namespace api.EntityFramework
      [Table("Products")]
      public class Product
      {
-
           public Guid Id { get; set; }
           public string Name { get; set; }
           public required string Slug { get; set; }

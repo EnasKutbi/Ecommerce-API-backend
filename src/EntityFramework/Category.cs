@@ -25,7 +25,12 @@ namespace api.EntityFramework
 
         [Column("created_at")]
         public DateTime CreatedAt { get; set; }
+        
+        // Relationships
+        public List<Product> Products { get; set; } = new List<Product>();
+
         public List<Product> Products { get; set; }
+
     }
 
 }
