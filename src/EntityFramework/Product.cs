@@ -16,10 +16,11 @@ namespace api.EntityFramework
     public  int Sold{ get; set;}
     public double Shipping { get; set;}
     public Guid CategoryId{ get; set;}//forien  key
-    public Category Category { get; set;}
+    
     public DateTime CreatedAt {get; set;}
 
     //Relationships
+    public Category Category { get; set;}
     public List<OrderItem>? OrderItems { get; set; } // for M-M with order
     }}
 

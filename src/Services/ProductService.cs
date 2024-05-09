@@ -47,7 +47,7 @@ namespace api.Service
             appDbContext.SaveChanges();
             return product;
         }
-        public void Updatedproductd(Guid ProductId, ProductModule updatpoduct)
+        public void Updatedproductd(Guid ProductId, ProductModel updatpoduct)
         {
             //     //create record 
             var productUpdated = appDbContext.Products

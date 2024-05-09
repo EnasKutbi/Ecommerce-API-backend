@@ -1,11 +1,13 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
+using api.Model;
+using api.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.EntityFramework
 {
-    public class ProductModule
+    public class ProductModel
     {
 
         public Guid Id { get; set; }
@@ -21,9 +23,16 @@ namespace api.EntityFramework
         public int Quantity { get; set; }
         public int Sold { get; set; }
         public double Shipping { get; set; }
-        public Guid CategoryId { get; set; }
-        public Category category { get; set; }
+
+        //Relation 1-M between category and Products
+        public Guid CategoryId { get; set; }//Foreign Key
+        public CategoryModel? Category { get; set; }
+        //public Category Category { get; set; }
         public DateTime CreatedAt { get; set; }
+
+
+        //Relation M-M between Orders and Products
+        List<OrderItemModel>? OrderItems { get; set; }
     }
 }
 

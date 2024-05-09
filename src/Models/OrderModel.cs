@@ -21,5 +21,8 @@ namespace api.Model
         [Required]
         public int OrderTotal { get; set; }
         public DateTime OrderDate { get; set; }
+
+        //Relation M-M between Orders and Products
+        public List<OrderItemModel> OrderItems { get; set; }
     }
 }

@@ -12,7 +12,6 @@ namespace api.Services
       _appDbContext = appDbContext;
     }
 
-    // add orderProduct
     public async Task<OrderItem> AddOrderItemService(Guid orderId, OrderItemModel newOrderItemModel)
     {
       var orderItem = new OrderItem

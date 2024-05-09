@@ -17,7 +17,10 @@ namespace api.Models
         public required string Name { get; set; }
         [EmailAddress(ErrorMessage = "User email is not valid email")]
         public required string Email { get; set; }
+        
         [MinLength(6, ErrorMessage = "User Password must be at least 6 characters.")]
+        [Required(ErrorMessage = "User Password is required")]
+        [RegularExpression(@"^((?=.*[a-z])(?=.*[A-Z])(?=.*\d)).+$")]
         public required string Password { get; set; }
         public string Address { get; set; } = string.Empty;
         public string Image { get; set; } = string.Empty;
