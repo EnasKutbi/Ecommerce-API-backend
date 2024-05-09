@@ -16,17 +16,17 @@ namespace api.Service
         }
         public IEnumerable<OrderModel> GetAllOrders()
         {
-            List<OrderModel> orders = new List<OrderModel>();
-            var datalist = _appDbContext.Orders.ToList();
-            datalist.ForEach(row => orders.Add(new OrderModel
-            {
-                OrderId = row.OrderId,
-                UserId = row.UserId,
-                ProductId = row.ProductId,
-                OrderStatus = row.OrderStatus,
-                OrderTotal = row.OrderTotal,
-                OrderDate = DateTime.Now,
-            }));
+            var orders = _appDbContext.Orders
+                .Select(row => new OrderModel
+                {
+                    OrderId = row.OrderId,
+                    UserId = row.UserId,
+                    OrderStatus = row.OrderStatus,
+                    OrderTotal = row.OrderTotal,
+                    OrderDate = row.OrderDate
+                })
+                .ToList();
+
             return orders;
         }
         public void PostOrder(OrderModel newOrder)
@@ -35,7 +35,6 @@ namespace api.Service
             { // create the record
                 OrderId = Guid.NewGuid(),
                 UserId = newOrder.UserId,
-                ProductId = newOrder.ProductId,
                 OrderStatus = newOrder.OrderStatus,
                 OrderTotal = newOrder.OrderTotal,
                 OrderDate = DateTime.Now,
