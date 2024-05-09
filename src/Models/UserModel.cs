@@ -5,7 +5,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using api.Model;
 
-namespace api.Models{
+namespace api.Models
+{
 
     public class UserModel
     {
@@ -25,4 +26,4 @@ namespace api.Models{
         public DateTime CreatedAt { get; set; }
         public List<OrderModel> Orders { get; set; } // by Atheer, 1-M relation
     }
-    }
+}

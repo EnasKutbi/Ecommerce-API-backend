@@ -19,27 +19,31 @@ namespace api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllUsers()
+        public async Task<IActionResult> GetAllCategory()
         {
             try
             {
                 var categories = await _categoryService.GetAllCategoryService();
-                if(categories.ToList().Count <= 0){
+                if (categories.ToList().Count <= 0)
+                {
                     return NotFound(new ErrorResponse { Message = "There is no categories to display" });
-                }else{
-                    return Ok(new SuccessResponse<IEnumerable<Category>>{
-                    Message = "Categories are returned succeefully",
-                    Data = categories
-                });
                 }
-                
+                else
+                {
+                    return Ok(new SuccessResponse<IEnumerable<Category>>
+                    {
+                        Message = "Categories are returned successfully",
+                        Data = categories
+                    });
+                }
+
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"There is an error , can not return the category list");
-                return StatusCode(500, new ErrorResponse{Message = ex.Message});
+                return StatusCode(500, new ErrorResponse { Message = ex.Message });
             }
-            
+
         }
 
         [HttpGet("{categoryId}")]
@@ -47,24 +51,25 @@ namespace api.Controllers
         {
             try
             {
-                
-                var category= await _categoryService.GetCategoryById(categoryId);
+
+                var category = await _categoryService.GetCategoryById(categoryId);
                 if (category == null)
                 {
                     return NotFound(new ErrorResponse { Message = $"There is no category found with ID : {categoryId}" });
                 }
                 else
                 {
-                    return Ok(new SuccessResponse<Category>{
-                    Message = "Category is returned succeefully",
-                    Data = category
+                    return Ok(new SuccessResponse<Category>
+                    {
+                        Message = "Category is returned successfully",
+                        Data = category
                     });
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"There is an error , can not return the category");
-                return StatusCode(500, new ErrorResponse{Message = ex.Message});
+                return StatusCode(500, new ErrorResponse { Message = ex.Message });
             }
 
         }
@@ -74,21 +79,25 @@ namespace api.Controllers
         {
             try
             {
-                var createdCategory =await  _categoryService.CreateCategoryService(newCategory);
-                if(createdCategory != null){
+                var createdCategory = await _categoryService.CreateCategoryService(newCategory);
+                if (createdCategory != null)
+                {
                     return CreatedAtAction(nameof(GetCategory), new { categoryId = createdCategory.CategoryId }, createdCategory);
-                }else{
-                    return Ok(new SuccessResponse<Category>{
-                    Message = "Category is created succeefully",
-                    Data = createdCategory
-                });
+                }
+                else
+                {
+                    return Ok(new SuccessResponse<Category>
+                    {
+                        Message = "Category is created successfully",
+                        Data = createdCategory
+                    });
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"There is an error , can not create new category");
-                return StatusCode(500, new ErrorResponse{Message = ex.Message});
-            }  
+                return StatusCode(500, new ErrorResponse { Message = ex.Message });
+            }
         }
 
 
@@ -97,23 +106,26 @@ namespace api.Controllers
         {
             try
             {
-                
+
                 var category = await _categoryService.UpdateCategoryService(categoryId, updateCategory);
                 if (category == null)
                 {
                     return NotFound(new ErrorResponse { Message = "There is no category found to update." });
-                }else{
-                    return Ok(new SuccessResponse<Category>{
-                    Message = "Category is updated  succeefully",
-                    Data = category
-                });
+                }
+                else
+                {
+                    return Ok(new SuccessResponse<Category>
+                    {
+                        Message = "Category is updated  succeefully",
+                        Data = category
+                    });
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"There is an error , can not update the category");
-                return StatusCode(500, new ErrorResponse{Message = ex.Message});
-            }     
+                return StatusCode(500, new ErrorResponse { Message = ex.Message });
+            }
         }
 
 
@@ -122,7 +134,7 @@ namespace api.Controllers
         {
             try
             {
-                
+
                 var result = await _categoryService.DeleteCategoryService(categoryId);
                 if (!result)
                 {
@@ -130,17 +142,18 @@ namespace api.Controllers
                 }
                 else
                 {
-                    return Ok(new SuccessResponse<Category>{
-                    Message = "Category is deleted succeefully",
+                    return Ok(new SuccessResponse<Category>
+                    {
+                        Message = "Category is deleted succeefully",
                     });
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"There is an error , can not delete the category");
-                return StatusCode(500, new ErrorResponse{Message = ex.Message});
+                return StatusCode(500, new ErrorResponse { Message = ex.Message });
             }
-            
+
         }
 
     }
