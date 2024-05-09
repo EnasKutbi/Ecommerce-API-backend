@@ -28,7 +28,7 @@ namespace api.EntityFramework
         public Guid CategoryId { get; set; }//Foreign Key
         public CategoryModel? Category { get; set; }
         //public Category Category { get; set; }
-        //public DateTime CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; }
 
 
         //Relation M-M between Orders and Products
