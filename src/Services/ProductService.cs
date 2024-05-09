@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using api.EntityFramework;
 using api.Model;
+using Microsoft.EntityFrameworkCore;
 
 namespace api.Service
 {
@@ -20,8 +21,11 @@ namespace api.Service
         public List<Product> GetProducts()
         {
 
-            return appDbContext.Products.ToList();//using appContext to return all product on table
-        }
+    return appDbContext.Products
+    .Include(product => product.OrderItems)
+        .ThenInclude(orderItem => orderItem.Order)
+    .ToList();//using appContext to return all product on table
+ }
 
         public Product? CreateNewProduct(Product NewProduct)
         {
@@ -46,7 +50,10 @@ namespace api.Service
         public void Updatedproductd(Guid ProductId, ProductModule updatpoduct)
         {
             //     //create record 
-            var productUpdated = appDbContext.Products.FirstOrDefault(product =>
+            var productUpdated = appDbContext.Products
+            .Include(product => product.OrderItems)
+                .ThenInclude(orderItem => orderItem.Order)
+            .FirstOrDefault(product =>
             product.Id == ProductId);
             {
                 if (productUpdated != null)

@@ -17,6 +17,11 @@ namespace api.EntityFramework
         [Required]
         public int OrderTotal { get; set; }
         public DateTime OrderDate { get; set; } = DateTime.UtcNow;
-        public ICollection<OrderItem> OrderItems { get; set; }
+        [Required]
+        public Guid ProductId { get; set; }
+        public Product Product { get; set; } // get Product Entity
+
+        //Relationships
+        public List<OrderItem>? OrderItems { get; set; } // for M-M with product
     }
 }
