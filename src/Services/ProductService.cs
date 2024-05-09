@@ -53,7 +53,7 @@ private AppDbContext  appDbContext;
 
         
     }
-    appDbContext.Save();
+    appDbContext.SaveChanges();
 
         
          

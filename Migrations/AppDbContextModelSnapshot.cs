@@ -206,6 +206,6 @@ namespace Backend.Migrations
                     b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
-        }
+        });
     }
-}
+}}
