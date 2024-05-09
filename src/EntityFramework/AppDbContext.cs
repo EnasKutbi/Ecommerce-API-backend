@@ -51,11 +51,12 @@ namespace api.EntityFramework
                 
 
              });
+            builder.Entity<User>().HasMany(u => u.Orders).WithOne(o => o.User).HasForeignKey(o => o.UserId);
         }
 
 
         
-        //protected override void OnModelCreating(ModelBuilder builder) {   هذا اللاين موجود فوق مايحتاج تكرري احذفي وحطي كودك فوق
+        //protected override void OnModelCreating(ModelBuilder builder) { 
             /* sitting rules by Fluent API
             builder.Entity<Order>().HasKey(o => o.OrderId); // 1st role, check PK
             builder.Entity<Order>().Property(o => o.OrderId).IsRequired().ValueGeneratedOnAdd(); // Generated from DB
@@ -63,7 +64,7 @@ namespace api.EntityFramework
             builder.Entity<Order>().Property(o => o.OrderTotal).IsRequired();
             builder.Entity<Order>().Property(o => o.OrderDate).IsRequired().HasDefaultValueSql("CURRENT_TIMESTAMPS");
             */
-            //builder.Entity<User>().HasMany(u => u.Orders).WithOne(o => o.User).HasForeignKey(o => o.UserId);
+            //
         //}
     }
 }

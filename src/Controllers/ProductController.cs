@@ -54,14 +54,14 @@ namespace api.Controller{
             }
             [HttpPut ("{productId}")]
 
-        public IActionResult UpdatepProduct(string productId, ProductModule updateProduct){
+        public IActionResult UpdateProduct(string productId, ProductModule updateProduct){
         if (!Guid. TryParse(productId, out Guid Id))
 
         return BadRequest("Invalid user ID Format");
 
         try
           {
-            _productService.Updatedproductd(Id,updateProduct);
+            _productService.UpdatedProductd(Id,updateProduct);
              return Ok("product Update successfully");
           }
              catch (Exception ex){
