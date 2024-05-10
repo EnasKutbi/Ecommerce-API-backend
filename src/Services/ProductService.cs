@@ -22,6 +22,7 @@ namespace api.Service
         {
 
     return appDbContext.Products
+    .Include(c => c.Category)
     .Include(product => product.OrderItems)
         .ThenInclude(orderItem => orderItem.Order)
     .ToList();//using appContext to return all product on table
@@ -51,6 +52,7 @@ namespace api.Service
         {
             //     //create record 
             var productUpdated = appDbContext.Products
+            .Include(c => c.Category)
             .Include(product => product.OrderItems)
                 .ThenInclude(orderItem => orderItem.Order)
             .FirstOrDefault(product =>

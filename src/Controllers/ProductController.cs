@@ -62,7 +62,7 @@ namespace api.Controller
         }
         [HttpPut("{productId}")]
 
-        public IActionResult UpdatepProduct(string productId, ProductModule updateProduct)
+        public IActionResult UpdatepProduct(string productId, ProductModel updateProduct)
         {
             if (!Guid.TryParse(productId, out Guid Id))
 
