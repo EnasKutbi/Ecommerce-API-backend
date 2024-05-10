@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace api.Controllers
 {
   [ApiController]
-  [Route("api/orderProducts")]
+  [Route("api/OrderItem")]
   public class OrderItemController : ControllerBase
   {
     private readonly OrderItemService _orderItemService;

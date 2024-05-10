@@ -2,7 +2,7 @@
 using api.EntityFramework;
 using api.Helpers;
 using Microsoft.EntityFrameworkCore;
-namespace api.Service
+namespace api.Services
 {
     public class CategoryService
     {

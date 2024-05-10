@@ -6,7 +6,7 @@ using api.EntityFramework;
 using api.Model;
 using Microsoft.EntityFrameworkCore;
 
-namespace api.Service
+namespace api.Services
 {
 
     public class ProductService
