@@ -35,9 +35,11 @@ namespace api.Service
         if (existingCategory != null)
             {
                 existingCategory.Name = updateCategory.Name;
+                existingCategory.Slug = Slug.GenerateSlug(existingCategory.Name);
                 existingCategory.Description = updateCategory.Description;
-                await _appDbContext.SaveChangesAsync();
+                
             }
+            await _appDbContext.SaveChangesAsync();
             return existingCategory;
         }
         public async Task<bool> DeleteCategoryService(Guid categoryId)
