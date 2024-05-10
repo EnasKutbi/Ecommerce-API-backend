@@ -10,18 +10,22 @@ namespace api.EntityFramework
     [Key]
     [Column("orderItem_id")]
     public Guid OrderItemId { get; set; }
-    public Guid OrderId { get; set; }
-    public Guid ProductId { get; set; }
+    
+    [Column("order_id")]
+    public Guid OrderId { get; set; }//Foreign Key
+    
+    [Column("product_id")]
+    public Guid ProductId { get; set; }//Foreign Key
 
     [Required(ErrorMessage = "Quantity is required.")]
-    [MinLength(1)]
+    [MinLength(1, ErrorMessage = "Quantity must have at least 1 ")]
+    [Column("quantity")]
     public int Quantity { get; set; }
 
     // Relationships
-    [ForeignKey("OrderId")]
+    
     public Order Order { get; set; }
 
-    [ForeignKey("ProductId")]
     public Product Product { get; set; }
   }
 }

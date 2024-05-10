@@ -13,11 +13,11 @@ namespace api.Service
         }
     public async Task<IEnumerable<Category>> GetAllCategoryService()
     {
-        return await _appDbContext.Categories.Include(category => category.Products).ToListAsync();
+        return await _appDbContext.Categories.Include(p => p.Products).ToListAsync();
     }
     public async Task<Category?> GetCategoryById(Guid categoryId)
     {
-        return await _appDbContext.Categories.Include(category => category.Products).FirstOrDefaultAsync(category => category.CategoryId == categoryId);
+        return await _appDbContext.Categories.Include(p => p.Products).FirstOrDefaultAsync(category => category.CategoryId == categoryId);
     }
     public async Task<Category> CreateCategoryService(Category newCategory)
     {
@@ -35,9 +35,11 @@ namespace api.Service
         if (existingCategory != null)
             {
                 existingCategory.Name = updateCategory.Name;
+                existingCategory.Slug = Slug.GenerateSlug(existingCategory.Name);
                 existingCategory.Description = updateCategory.Description;
-                await _appDbContext.SaveChangesAsync();
+                
             }
+            await _appDbContext.SaveChangesAsync();
             return existingCategory;
         }
         public async Task<bool> DeleteCategoryService(Guid categoryId)
