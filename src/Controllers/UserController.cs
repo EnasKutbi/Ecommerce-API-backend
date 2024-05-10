@@ -3,19 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using api.EntityFramework;
-using api.Model;
-using api.Models;
 using api.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
 {
     [ApiController]
-    [Route("api/users")]
+    [Route("/api/users")]
     public class UserController : ControllerBase
     {
         private readonly UserService _userService;
-
         public UserController(AppDbContext appDbContext)
         {
             _userService = new UserService(appDbContext);
@@ -27,168 +24,112 @@ namespace api.Controllers
             try
             {
                 var users = await _userService.GetAllUsersService();
-                if (users.Count() < 1)
+                if (users.ToList().Count < 1)
                 {
-                    return NotFound(new ErrorResponse { Success = false, Message = "There are no users to display" });
+                    return NotFound(new ErrorResponse { Success = false, Message = "There is no users to display" });
                 }
                 else
                 {
-                    return Ok(new SuccessResponse<IEnumerable<User>> { Success = true, Message = "All users are returned successfully", Data = users });
+                    return Ok(new SuccessResponse<IEnumerable<User>> { Success = true, Message = "all users are returned successfully", Data = users });
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine("An error occurred when trying to get all users");
+                Console.WriteLine($"An error occurred here when tried get all users");
                 return StatusCode(500, new ErrorResponse { Message = ex.Message });
             }
         }
 
-        [HttpPost]
-        public IActionResult CreateUser(UserModel newUser)
+        [HttpGet("{userId}")]
+        public async Task<IActionResult> GetUser(Guid userId)
         {
             try
             {
-                _userService.CreateUser(newUser);
-                return Ok();
+                var user = await _userService.GetUserById(userId);
+                if (user == null)
+                {
+                    return NotFound(new ErrorResponse { Success = false, Message = $"There is no user found with ID : {userId}" });
+                }
+                else
+                {
+                    return Ok(new SuccessResponse<User> { Success = true, Message = "user is returned successfully", Data = user });
+                }
             }
             catch (Exception ex)
             {
-                Console.WriteLine("User cannot be created");
+                Console.WriteLine($"An error occurred here when tried get user");
+                return StatusCode(500, new ErrorResponse { Success = false, Message = ex.Message });
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateUser(User newUser)
+        {
+            try
+            {
+                var createdUser = await _userService.CreateUserService(newUser);
+                if (createdUser != null)
+                {
+                    return CreatedAtAction(nameof(GetUser), new { userId = createdUser.UserId }, createdUser);
+                }
+                else
+                {
+                    return Ok(new SuccessResponse<User>
+                    {
+                        Message = "User is created successfully",
+                        Data = createdUser
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"user can not be created");
                 return StatusCode(500, new ErrorResponse { Success = false, Message = ex.Message });
             }
         }
 
         [HttpPut("{userId}")]
-        public IActionResult UpdateUser(Guid userId, UserModel updateUser)
+        public async Task<IActionResult> UpdateUser(Guid userId, User updateUser)
         {
             try
             {
-                _userService.UpdateUserService(userId, updateUser);
-                return Ok("User Updated Successfully");
+                var user = await _userService.UpdateUserService(userId, updateUser);
+                if (user == null)
+                {
+                    return NotFound(new ErrorResponse { Success = false, Message = "No user found" });
+                }
+                else
+                {
+                    return Ok(new SuccessResponse<User> { Success = true, Message = "user is updated successfully", Data = user });
+                }
             }
             catch (Exception ex)
             {
-                Console.WriteLine("User cannot be updated");
+                Console.WriteLine($"user can not be updated");
                 return StatusCode(500, new ErrorResponse { Success = false, Message = ex.Message });
             }
         }
 
         [HttpDelete("{userId}")]
-        public IActionResult DeleteUser(Guid userId)
+        public async Task<IActionResult> DeleteUser(Guid userId)
         {
             try
             {
-                _userService.DeleteUserService(userId);
-                return Ok("User Deleted Successfully");
+                var result = await _userService.DeleteUserService(userId);
+                if (!result)
+                {
+                    return NotFound(new ErrorResponse { Success = false, Message = "No user found" });
+                }
+                else
+                {
+                    return Ok(new SuccessResponse<User> { Success = true, Message = "user is deleted successfully" });
+                }
             }
             catch (Exception ex)
             {
-                Console.WriteLine("User cannot be deleted");
+                Console.WriteLine($"user can not be deleted");
                 return StatusCode(500, new ErrorResponse { Success = false, Message = ex.Message });
             }
         }
-/*
-        [HttpGet("{userId}")]
-        public async Task<IActionResult> GetUser(string userId)
-        {
-            try
-            {
-                if (!Guid.TryParse(userId, out Guid userIdGuid))
-
-        /*
-                [HttpGet("{userId}")]
-                public async Task<IActionResult> GetUser(Guid userId)
-
-                {
-                    try
-                    {
-                        var user = await _userService.GetUserById(userId);
-                        if (user == null)
-                        {
-                            return NotFound(new ErrorResponse { Success = false, Message = $"user with ID: {userId} not found" });
-                        }
-                        else
-                        {
-                            return Ok(new SuccessResponse<User> { Success = true, Message = "User is returned successfully", Data = user });
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine("An error occurred when trying to get a user");
-                        return StatusCode(500, new ErrorResponse { Success = false, Message = ex.Message });
-                    }
-                }
-
-                [HttpPost]
-                public async Task<IActionResult> CreateUser(User newUser)
-                {
-                    try
-                    {
-                        var createdUser = await _userService.CreateUserService(newUser);
-                        if (createdUser != null)
-                        {
-                            return CreatedAtAction(nameof(GetUser), new { userId = createdUser.UserId }, createdUser);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine("User cannot be created");
-                        return StatusCode(500, new ErrorResponse { Success = false, Message = ex.Message });
-                    }
-                }
-
-                [HttpPut("{userId}")]
-                public async Task<IActionResult> UpdateUser(string userId, User updateUser)
-                {
-                    try
-                    {
-                        if (!Guid.TryParse(userId, out Guid userIdGuid))
-                        {
-                            return BadRequest("Invalid user ID format");
-                        }
-
-                        var user = await _userService.UpdateUserService(userIdGuid, updateUser);
-                        if (user == null)
-                        {
-                            return NotFound(new ErrorResponse { Success = false, Message = "No user found" });
-                        }
-                        else
-                        {
-                            return Ok(new SuccessResponse<User> { Success = true, Message = "User is updated successfully", Data = user });
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine("User cannot be updated");
-                        return StatusCode(500, new ErrorResponse { Success = false, Message = ex.Message });
-                    }
-                }
-
-                [HttpDelete("{userId}")]
-                public async Task<IActionResult> DeleteUser(string userId)
-                {
-                    try
-                    {
-                        if (!Guid.TryParse(userId, out Guid userIdGuid))
-                        {
-                            return BadRequest("Invalid user ID format");
-                        }
-
-                        var result = await _userService.DeleteUserService(userIdGuid);
-                        if (!result)
-                        {
-                            return NotFound(new ErrorResponse { Success = false, Message = "No user found" });
-                        }
-                        else
-                        {
-                            return Ok(new SuccessResponse<User> { Success = true, Message = "User is deleted successfully" });
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine("User cannot be deleted");
-                        return StatusCode(500, new ErrorResponse { Success = false, Message = ex.Message });
-                    }
-                }*/
     }
 }
