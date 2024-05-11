@@ -167,7 +167,7 @@ CREATE TABLE
     orders (
         order_id UUID PRIMARY KEY DEFAULT uuid_generate_v4 (),
         order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        order_status VARCHAR(20) DEFAULT 'Pending',
+        order_status VARCHAR(50) DEFAULT 'Pending',
         user_id uuid,
         CONSTRAINT fk_users FOREIGN KEY (user_id) REFERENCES users (user_id),
         --product_id uuid, CONSTRAINT fk_products FOREIGN KEY(product_id) REFERENCES products(product_id),

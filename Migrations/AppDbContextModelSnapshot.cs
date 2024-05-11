@@ -79,9 +79,6 @@ namespace Backend.Migrations
                     b.Property<int>("OrderTotal")
                         .HasColumnType("integer");
 
-                    b.Property<Guid>("ProductId")
-                        .HasColumnType("uuid");
-
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
 
@@ -125,7 +122,8 @@ namespace Backend.Migrations
                         .HasDefaultValueSql("uuid_generate_v4()");
 
                     b.Property<Guid>("CategoryId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("category_id");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -152,7 +150,8 @@ namespace Backend.Migrations
                         .HasColumnType("integer");
 
                     b.Property<double>("Shipping")
-                        .HasColumnType("double precision");
+                        .HasColumnType("double precision")
+                        .HasColumnName("shipping");
 
                     b.Property<string>("Slug")
                         .IsRequired()
