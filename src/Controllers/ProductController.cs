@@ -52,10 +52,30 @@ namespace api.Controller
                 Console.WriteLine($"There is an error , can not return the Product");
                 return StatusCode(500, new ErrorResponse { Message = ex.Message });
             }}
-       [HttpPut("{ProductId}")]
-        public async Task<IActionResult> CreateProduct(ProductModel NewProduct)
+         [HttpGet("search")] 
+
+        public async Task<IActionResult> SearchProducts(string keyword) 
+
+        { 
+
+            if (string.IsNullOrWhiteSpace(keyword)) 
+
+            { 
+
+                return BadRequest("Keyword is required for search."); 
+
+            } 
+            var products = await _productService.SearchProductsAsync(keyword); 
+
+            return Ok(products); 
+
+        }
+
+       [HttpPost]
+        public async Task<IActionResult> CreateProduct(Product NewProduct)
         {
-             
+            try
+            {
             if (!ModelState.IsValid)
             {
                 throw new Exception("Invalid User Data");
@@ -65,7 +85,15 @@ namespace api.Controller
             var newProduct = await _productService.CreateProductService(NewProduct);
             return ApiResponse.Created(newProduct, "User created successfully");
 
+            } 
+             catch (Exception ex)
+            {
+                Console.WriteLine($"There is an error , can not delete the Product");
+                return StatusCode(500, new ErrorResponse { Message = ex.Message });
+            }
+
         }
+        
         [HttpPost("AddOrderItem")]
          public async Task<IActionResult> AddProdetOrder([FromQuery] Guid ProductId ,  [FromQuery]Guid OrderId ){
          try
@@ -77,16 +105,16 @@ namespace api.Controller
          {
            return ApiResponse.ServerError(ex.Message);
          }}
-         [HttpPost]
-        public async Task<IActionResult> UpdateCategory(Guid categoryId, ProductModel updateProduct)
+        [HttpPut("{ProductId}")]
+        public async Task<IActionResult> UpdateProduct(Guid ProductId, ProductModel updateProduct)
         {
             try
             {
 
-                var Product = await _productService.UpdateProductService(categoryId, updateProduct);
+                var Product = await _productService.UpdateProductService(ProductId, updateProduct);
                 if (Product == null)
                 {
-                    return NotFound(new ErrorResponse { Message = "There is no category found to update." });
+                    return NotFound(new ErrorResponse { Message = "There is no product found to update." });
                 }
                 else
                 {
@@ -95,7 +123,7 @@ namespace api.Controller
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"There is an error , can not update the category");
+                Console.WriteLine($"There is an error , can not update the product");
                 return StatusCode(500, new ErrorResponse { Message = ex.Message });
             }
         }
