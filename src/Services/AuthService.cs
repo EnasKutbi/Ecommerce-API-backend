@@ -5,7 +5,7 @@ using System.Text;
 using api.EntityFramework;
 using Microsoft.IdentityModel.Tokens;
 
-namespace api.service
+namespace api.Services
 {
 
 public class AuthService
