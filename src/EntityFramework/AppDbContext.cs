@@ -46,8 +46,10 @@ namespace api.EntityFramework
                 entity.Property(p => p.Price).IsRequired();
                 entity.Property(p => p.Quantity);
                 entity.Property(p => p.Sold);
-                entity.Property(p => p.Shipping);
-                entity.Property(p => p.CategoryId);
+                entity.Property(p => p.Shipping)
+                    .HasColumnName("shipping");
+                entity.Property(p => p.CategoryId)
+                    .HasColumnName("category_id");
                 entity.Property(p => p.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
             });
 

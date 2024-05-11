@@ -24,8 +24,8 @@ namespace api.EntityFramework
 
     // Relationships
     
-    public Order Order { get; set; }
+    public Order? Order { get; set; }
 
-    public Product Product { get; set; }
+    public Product? Product { get; set; }
   }
 }
