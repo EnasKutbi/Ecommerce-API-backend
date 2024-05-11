@@ -18,18 +18,18 @@ namespace api.Services
 
         public async Task<IEnumerable<User>> GetAllUsersService()
         {
-            return await _appDbContext.Users.Include(user => user.Orders).ToListAsync();
+            return await _appDbContext.Users.Include(o => o.Orders).ToListAsync();
         }
 
         public async Task<User?> GetUserById(Guid userId)
         {
-            return await _appDbContext.Users.Include(user => user.Orders).FirstOrDefaultAsync(user => user.UserId == userId);
+            return await _appDbContext.Users.Include(o => o.Orders).FirstOrDefaultAsync(user => user.UserId == userId);
         }
 
         public async Task<User> CreateUserService(User newUser)
         {
             newUser.UserId = Guid.NewGuid();
-            newUser.CreatedAt = DateTime.Now;
+            newUser.CreatedAt = DateTime.UtcNow;
             _appDbContext.Users.Add(newUser);
             await _appDbContext.SaveChangesAsync();
             return newUser;

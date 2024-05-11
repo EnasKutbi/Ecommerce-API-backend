@@ -29,7 +29,7 @@ namespace api.Model
     public DateTime CreatedAt { get; set; }
 
     // Relationships
-    public List<ProductModel> Products { get; set; } 
+    public List<ProductModel>? Products { get; set; } 
   }
 
 }

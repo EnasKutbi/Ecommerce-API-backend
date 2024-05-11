@@ -24,7 +24,7 @@ namespace api.Services
         
         newCategory.CategoryId = Guid.NewGuid();
         newCategory.Slug = Slug.GenerateSlug(newCategory.Name);
-        newCategory.CreatedAt = DateTime.Now;
+        newCategory.CreatedAt = DateTime.UtcNow;
         _appDbContext.Categories.Add(newCategory); 
         await _appDbContext.SaveChangesAsync();
         return newCategory;
