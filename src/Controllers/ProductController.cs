@@ -21,79 +21,111 @@ namespace api.Controller
         }
 
 
+        
         [HttpGet]
-        public IActionResult GetProducts()
+        public async Task<IActionResult> GetAllProducts()
         {
-            try
-            {
-                var products = _productService.GetProducts();
-                return Ok(new SuccessResponse<List<Product>>
-                {
-                    Success = true,
-                    Message = "product are return successfully",
-                    Data = products
-                });
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("an error occured here when tried to get all products");
-                return StatusCode(500, new ErrorResponse
-                {
-                    Message = e.Message,
-                    Success = false,
-                });
-            }
+
+            var users = await _productService.GetProducts();
+            return ApiResponse.Success(users, "All Users are returned successfully");
 
         }
-        [HttpPost]
-        public IActionResult PostProduct(Product newProduct)
-        {
 
+        [HttpGet("{categoryId}")]
+        public async Task<IActionResult> GetCategory(Guid ProductId)
+        {
             try
             {
-                var newProducts = _productService.CreateNewProduct(newProduct);
-                return Ok(newProducts);
+
+                var ProductById = await _productService.GetProductById(ProductId);
+                if (ProductById == null)
+                {
+                    return NotFound(new ErrorResponse { Message = $"There is no category found with ID : {ProductId}" });
+                }
+                else
+                {
+                    return ApiResponse.Success(ProductById, "All Users are returned successfully");
+                }
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                Console.WriteLine($"There is an error , can not return the category");
+                return StatusCode(500, new ErrorResponse { Message = ex.Message });
+            }}
+       [HttpPost]
+        public async Task<IActionResult> CreateProduct(ProductModel newProduct)
+        {
+             
+            if (!ModelState.IsValid)
+            {
+                throw new Exception("Invalid User Data");
             }
 
+
+            var newUser = await _productService.CreateProductService(newProduct);
+            return ApiResponse.Created(newUser, "User created successfully");
+
         }
-        [HttpPut("{productId}")]
+        [HttpPost("AddOrderItem")]
+         public async Task<IActionResult> AddProdetOrder([FromQuery] Guid ProductId ,  [FromQuery]Guid OrderId ){
+         try
+         {
+            await _productService.AddProdetOrder(ProductId,OrderId);
+            return ApiResponse.Created("created");
+         }
+         catch(Exception ex)
+         {
+           return ApiResponse.ServerError(ex.Message);
 
-        public IActionResult UpdatepProduct(string productId, ProductModule updateProduct)
+         }}
+         
+        [HttpPut("{categoryId}")]
+        public async Task<IActionResult> UpdateProduct(Guid ProductId, ProductModel updateProduct)
         {
-            if (!Guid.TryParse(productId, out Guid Id))
-
-                return BadRequest("Invalid user ID Format");
-
             try
             {
-                _productService.Updatedproductd(Id, updateProduct);
-                return Ok("product Update successfully");
+
+                var product = await _productService.UpdateProductService(ProductId, updateProduct);
+                if (product == null)
+                {
+                    return NotFound(new ErrorResponse { Message = "There is no Product found to update." });
+                }
+                else
+                {
+                    return ApiResponse.Success(product, "All Users are returned successfully");
+                }
             }
             catch (Exception ex)
             {
-
-                return StatusCode(500, ex.Message);
+                Console.WriteLine($"There is an error , can not update the category");
+                return StatusCode(500, new ErrorResponse { Message = ex.Message });
             }
-
         }
-        [HttpDelete("{productId}")]
-
-        public IActionResult deleteProduct(string productId)
+        [HttpDelete("{ProductId}")]
+        public async Task<IActionResult> DeleteProduct(Guid ProductId)
         {
-            if (!Guid.TryParse(productId, out Guid Id))
+            try
             {
-                return BadRequest("Invalid product id format");
+
+                var result = await _productService.DeleteProductService(ProductId);
+                if (!result)
+                {
+                    return NotFound(new ErrorResponse { Message = $"The category with ID : {ProductId} is not found to be deleted" });
+                }
+                else
+                {
+                    return Ok(new SuccessResponse<Product>
+                    {
+                        Message = "Product is deleted succeefully",
+                    });
+                }
             }
-            var res = _productService.deleteProduct(Id);
-            if (!res)
+            catch (Exception ex)
             {
-                return NotFound();
+                Console.WriteLine($"There is an error , can not delete the category");
+                return StatusCode(500, new ErrorResponse { Message = ex.Message });
             }
-            return Ok(res);
+
         }
-    }
-}
+
+}}

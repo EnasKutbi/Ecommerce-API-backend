@@ -1,31 +1,31 @@
-using api.EntityFramework;
-using api.Models;
+// using api.EntityFramework;
+// using api.Models;
 
-namespace api.Services
-{
-  public class OrderItemService
-  {
-    private readonly AppDbContext _appDbContext;
+// namespace api.Services
+// {
+//   public class OrderItemService
+//   {
+//     private readonly AppDbContext _appDbContext;
 
-    public OrderItemService(AppDbContext appDbContext)
-    {
-      _appDbContext = appDbContext;
-    }
+//     public OrderItemService(AppDbContext appDbContext)
+//     {
+//       _appDbContext = appDbContext;
+//     }
 
-    public async Task<OrderItem> AddOrderItemService(Guid orderId, OrderItemModel newOrderItemModel)
-    {
-      var orderItem = new OrderItem
-      {
-        OrderItemId = Guid.NewGuid(),
-        OrderId = orderId,
-        ProductId = newOrderItemModel.ProductId,
-        Quantity = newOrderItemModel.Quantity,
-      };
+//     public async Task<OrderItem> AddOrderItemService(Guid orderId, OrderItemModel newOrderItemModel)
+//     {
+//       var orderItem = new OrderItem
+//       {
+        
+//         OrderId = orderId,
+//         ProductId = newOrderItemModel.ProductId,
+        
+//       };
 
-      await _appDbContext.OrderItems.AddAsync(orderItem);
-      await _appDbContext.SaveChangesAsync();
+//       await _appDbContext.OrderItems.AddAsync(orderItem);
+//       await _appDbContext.SaveChangesAsync();
 
-      return orderItem;
-    }
-  }
-}
+//       return orderItem;
+//     }
+//   }
+// }

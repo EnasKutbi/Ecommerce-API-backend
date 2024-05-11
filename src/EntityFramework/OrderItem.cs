@@ -7,10 +7,13 @@ namespace api.EntityFramework
   [Table("OrderItem")]
   public class OrderItem
   {
+    
+    // [ForeignKey("OrderId")]
     [Key]
-    [Column("orderItem_id")]
-    public Guid OrderItemId { get; set; }
     public Guid OrderId { get; set; }
+
+    // [ForeignKey("ProductId")]
+     [Key]
     public Guid ProductId { get; set; }
 
     [Required(ErrorMessage = "Quantity is required.")]
@@ -18,10 +21,9 @@ namespace api.EntityFramework
     public int Quantity { get; set; }
 
     // Relationships
-    [ForeignKey("OrderId")]
+  
     public Order Order { get; set; }
 
-    [ForeignKey("ProductId")]
     public Product Product { get; set; }
   }
 }

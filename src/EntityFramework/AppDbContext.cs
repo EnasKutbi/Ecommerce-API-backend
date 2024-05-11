@@ -34,7 +34,7 @@ namespace api.EntityFramework
             
             });
 
-            //----------------- Product (Noir) --------------------
+            //----------------- Product (Nouir) --------------------
             modelBuilder.Entity<Product>(entity =>
             {
                 entity.HasKey(p => p.Id);

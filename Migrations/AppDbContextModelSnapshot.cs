@@ -87,8 +87,6 @@ namespace Backend.Migrations
 
                     b.HasKey("OrderId");
 
-                    b.HasIndex("ProductId");
-
                     b.HasIndex("UserId");
 
                     b.ToTable("Orders");
@@ -100,9 +98,6 @@ namespace Backend.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("ProductId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("OrderItemId")
                         .HasColumnType("uuid");
 
                     b.Property<int>("Quantity")
@@ -221,19 +216,11 @@ namespace Backend.Migrations
 
             modelBuilder.Entity("api.EntityFramework.Order", b =>
                 {
-                    b.HasOne("api.EntityFramework.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("api.EntityFramework.User", "User")
                         .WithMany("Orders")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Product");
 
                     b.Navigation("User");
                 });
