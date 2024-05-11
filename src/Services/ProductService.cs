@@ -22,21 +22,12 @@ namespace api.Services
         public async Task <List<Product>> GetProducts()
         {
 
-<<<<<<< HEAD
              return await appDbContext.Products
                .Include(product => product.Category)
                .Include(product => product.OrderItems)
                .ThenInclude(orderItem => orderItem.Product)
             .ToListAsync();//using appContext to return all product on table
         }
-=======
-    return appDbContext.Products
-    .Include(c => c.Category)
-    .Include(product => product.OrderItems)
-        .ThenInclude(orderItem => orderItem.Order)
-    .ToList();//using appContext to return all product on table
- }
->>>>>>> 7636f781c269c3b30565bcfe0a24518d7a6931e8
 
         public async Task<Product?> GetProductById(Guid ProductId)
     {
@@ -82,11 +73,7 @@ namespace api.Services
     {
             //     //create record 
             var productUpdated = appDbContext.Products
-<<<<<<< HEAD
             .Include(product=>product.Category)
-=======
-            .Include(c => c.Category)
->>>>>>> 7636f781c269c3b30565bcfe0a24518d7a6931e8
             .Include(product => product.OrderItems)
             .ThenInclude(orderItem => orderItem.Product)
             .FirstOrDefault(product =>

@@ -52,7 +52,7 @@ namespace api.Controller
                 Console.WriteLine($"There is an error , can not return the Product");
                 return StatusCode(500, new ErrorResponse { Message = ex.Message });
             }}
-       [HttpPost]
+       [HttpPut("{ProductId}")]
         public async Task<IActionResult> CreateProduct(ProductModel NewProduct)
         {
              
@@ -76,32 +76,26 @@ namespace api.Controller
          catch(Exception ex)
          {
            return ApiResponse.ServerError(ex.Message);
-
-<<<<<<< HEAD
          }}
-         
-        [HttpPut("{ProductId}")]
-        public async Task<IActionResult> UpdateProduct(Guid ProductId, ProductModel updateProduct)
-=======
-        public IActionResult UpdatepProduct(string productId, ProductModel updateProduct)
->>>>>>> 7636f781c269c3b30565bcfe0a24518d7a6931e8
+         [HttpPost]
+        public async Task<IActionResult> UpdateCategory(Guid categoryId, ProductModel updateProduct)
         {
             try
             {
 
-                var product = await _productService.UpdateProductService(ProductId, updateProduct);
-                if (product == null)
+                var Product = await _productService.UpdateProductService(categoryId, updateProduct);
+                if (Product == null)
                 {
-                    return NotFound(new ErrorResponse { Message = "There is no Product found to update." });
+                    return NotFound(new ErrorResponse { Message = "There is no category found to update." });
                 }
                 else
                 {
-                    return ApiResponse.Success(product, "All Product are returned successfully");
+                    return ApiResponse.Success(Product, "Product are returned successfully");
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"There is an error , can not update the Products");
+                Console.WriteLine($"There is an error , can not update the category");
                 return StatusCode(500, new ErrorResponse { Message = ex.Message });
             }
         }
