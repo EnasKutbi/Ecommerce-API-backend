@@ -1,11 +1,14 @@
-using System.ComponentModel;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Data;
-using api.Model;
+using System.Linq;
+using System.Threading.Tasks;
 using api.Models;
-using Microsoft.AspNetCore.Mvc;
 
-namespace api.EntityFramework
+
+
+namespace api.Model
+
 {
     public class ProductModel
     {
