@@ -20,7 +20,9 @@ builder.Services.AddControllers();
 
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<CategoryService>();
+builder.Services.AddScoped<OrderService>();
 builder.Services.AddScoped<OrderItemService>();
+builder.Services.AddScoped<ProductService>();
 builder.Services.AddScoped<AuthService>();
 
 var Configuration = builder.Configuration;
