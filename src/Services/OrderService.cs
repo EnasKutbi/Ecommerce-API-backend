@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using api.EntityFramework;
 using api.Model;
+using Microsoft.EntityFrameworkCore;
 
 namespace api.Services
 {
@@ -14,7 +15,59 @@ namespace api.Services
         {
             _appDbContext = appDbContext;
         }
-        public IEnumerable<OrderModel> GetAllOrders()
+
+        ////// Get All
+        public async Task<IEnumerable<Order>> GetAllOrders()
+        {
+            return await _appDbContext.Orders.Include(u => u.User).ToListAsync();
+        }
+
+        //////// Get By ID
+        public async Task<Order?> GetOrderById(Guid orderId)
+        {
+            return await _appDbContext.Orders.Include(u => u.User).FirstOrDefaultAsync(order => order.OrderId == orderId);
+        }
+
+        ////// Post
+        public async Task<Order> PostOrder(Order newOrder)
+        {
+            newOrder.OrderId = Guid.NewGuid();
+            newOrder.OrderDate = DateTime.UtcNow; 
+            _appDbContext.Orders.Add(newOrder); // add record to context
+            await _appDbContext.SaveChangesAsync(); // save to DB
+            return newOrder;
+        }
+
+        //////// Update
+        public async Task<Order?> PutOrder(Guid orderId, Order putorder)
+        {
+            var existingOrder = _appDbContext.Orders.FirstOrDefault(o => o.OrderId == orderId);
+            if (existingOrder != null)
+            {
+                existingOrder.OrderStatus = putorder.OrderStatus;
+                existingOrder.OrderTotal = putorder.OrderTotal;
+            }
+            await _appDbContext.SaveChangesAsync();
+            return existingOrder;
+        }
+
+        /////// Delet
+        public async Task<bool> DeleteOrder(Guid orderId)
+        {
+            var OrderToRemove = _appDbContext.Orders.FirstOrDefault(o => o.OrderId == orderId);
+            if (OrderToRemove != null)
+            {
+                _appDbContext.Orders.Remove(OrderToRemove);
+                await _appDbContext.SaveChangesAsync();
+                return true;
+            }
+            return false;
+        }
+    }
+}
+
+/* 
+public IEnumerable<OrderModel> GetAllOrders()
         {
             var orders = _appDbContext.Orders
                 .Select(row => new OrderModel
@@ -63,5 +116,4 @@ namespace api.Services
                 _appDbContext.SaveChanges();
             }
         }
-    }
-}
+*/

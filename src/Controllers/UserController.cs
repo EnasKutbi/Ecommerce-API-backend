@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using api.EntityFramework;
+using api.Model;
 using api.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -87,6 +88,8 @@ namespace api.Controllers
                 return StatusCode(500, new ErrorResponse { Success = false, Message = ex.Message });
             }
         }
+
+        
 
         [HttpPut("{userId}")]
         public async Task<IActionResult> UpdateUser(Guid userId, User updateUser)
