@@ -13,7 +13,7 @@ namespace api.Models
     [Column("product_id")]
     public Guid ProductId { get; set; }//Foreign Key
    
-    
+    public int Quntity { get; set; }
     //Relations M-M between Orders and Products
     public OrderModel? Order { get; set; }
     public ProductModel? Product { get; set; }
