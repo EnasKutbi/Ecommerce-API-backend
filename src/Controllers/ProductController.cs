@@ -125,5 +125,16 @@ namespace api.Controller
             }
 
         }
+        [HttpGet("search")]
+        public async Task<IActionResult> SearchProducts(string keyword)
+        {
+            if (string.IsNullOrWhiteSpace(keyword))
+            {
+                return BadRequest("Keyword is required for search.");
+            }
+
+            var products = await _productService.SearchProductsAsync(keyword);
+            return Ok(products);
+        }
 
 }}

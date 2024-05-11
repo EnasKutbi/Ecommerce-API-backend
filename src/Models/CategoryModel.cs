@@ -21,10 +21,10 @@ namespace api.Model
     public string Slug { get; set; } = string.Empty;
 
     [MaxLength(300, ErrorMessage = "Description can be at most 300 characters long.")]
-    
+
     [Column("description")]    
     public string Description { get; set; } = string.Empty;
-    
+
     [Column("createdAt")]
     public DateTime CreatedAt { get; set; }
 
@@ -33,4 +33,3 @@ namespace api.Model
   }
 
 }
-

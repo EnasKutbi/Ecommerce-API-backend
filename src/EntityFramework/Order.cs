@@ -10,7 +10,7 @@ namespace api.EntityFramework
         public Guid OrderId { get; set; }
         [Required]
         public Guid UserId { get; set; }// Foreign Key
-        
+
         [Required]
         [MaxLength(30)]
         public required string OrderStatus { get; set; }
