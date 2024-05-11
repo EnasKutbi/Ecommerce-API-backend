@@ -26,13 +26,13 @@ namespace api.Controller
         public async Task<IActionResult> GetAllProducts()
         {
 
-            var users = await _productService.GetProducts();
-            return ApiResponse.Success(users, "All Users are returned successfully");
+            var Product = await _productService.GetProducts();
+            return ApiResponse.Success(Product, "All Users are returned successfully");
 
         }
 
-        [HttpGet("{categoryId}")]
-        public async Task<IActionResult> GetCategory(Guid ProductId)
+        [HttpGet("{ProductId}")]
+        public async Task<IActionResult> GetProduct(Guid ProductId)
         {
             try
             {
@@ -40,20 +40,20 @@ namespace api.Controller
                 var ProductById = await _productService.GetProductById(ProductId);
                 if (ProductById == null)
                 {
-                    return NotFound(new ErrorResponse { Message = $"There is no category found with ID : {ProductId}" });
+                    return NotFound(new ErrorResponse { Message = $"There is no Product found with ID : {ProductId}" });
                 }
                 else
                 {
-                    return ApiResponse.Success(ProductById, "All Users are returned successfully");
+                    return ApiResponse.Success(ProductById, "All Product are returned successfully");
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"There is an error , can not return the category");
+                Console.WriteLine($"There is an error , can not return the Product");
                 return StatusCode(500, new ErrorResponse { Message = ex.Message });
             }}
        [HttpPost]
-        public async Task<IActionResult> CreateProduct(ProductModel newProduct)
+        public async Task<IActionResult> CreateProduct(ProductModel NewProduct)
         {
              
             if (!ModelState.IsValid)
@@ -62,8 +62,8 @@ namespace api.Controller
             }
 
 
-            var newUser = await _productService.CreateProductService(newProduct);
-            return ApiResponse.Created(newUser, "User created successfully");
+            var newProduct = await _productService.CreateProductService(NewProduct);
+            return ApiResponse.Created(newProduct, "User created successfully");
 
         }
         [HttpPost("AddOrderItem")]
@@ -80,7 +80,7 @@ namespace api.Controller
 <<<<<<< HEAD
          }}
          
-        [HttpPut("{categoryId}")]
+        [HttpPut("{ProductId}")]
         public async Task<IActionResult> UpdateProduct(Guid ProductId, ProductModel updateProduct)
 =======
         public IActionResult UpdatepProduct(string productId, ProductModel updateProduct)
@@ -96,12 +96,12 @@ namespace api.Controller
                 }
                 else
                 {
-                    return ApiResponse.Success(product, "All Users are returned successfully");
+                    return ApiResponse.Success(product, "All Product are returned successfully");
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"There is an error , can not update the category");
+                Console.WriteLine($"There is an error , can not update the Products");
                 return StatusCode(500, new ErrorResponse { Message = ex.Message });
             }
         }
@@ -114,7 +114,7 @@ namespace api.Controller
                 var result = await _productService.DeleteProductService(ProductId);
                 if (!result)
                 {
-                    return NotFound(new ErrorResponse { Message = $"The category with ID : {ProductId} is not found to be deleted" });
+                    return NotFound(new ErrorResponse { Message = $"The Product with ID : {ProductId} is not found to be deleted" });
                 }
                 else
                 {
@@ -126,7 +126,7 @@ namespace api.Controller
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"There is an error , can not delete the category");
+                Console.WriteLine($"There is an error , can not delete the Product");
                 return StatusCode(500, new ErrorResponse { Message = ex.Message });
             }
 
