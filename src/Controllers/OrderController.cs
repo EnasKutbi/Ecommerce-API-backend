@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using api.EntityFramework;
 using api.Model;
-using api.Service;
+using api.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controller

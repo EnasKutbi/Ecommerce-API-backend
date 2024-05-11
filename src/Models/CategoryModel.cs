@@ -22,13 +22,14 @@ namespace api.Model
 
     [MaxLength(300, ErrorMessage = "Description can be at most 300 characters long.")]
     
-    [Column("description")]    public string Description { get; set; } = string.Empty;
+    [Column("description")]    
+    public string Description { get; set; } = string.Empty;
     
     [Column("createdAt")]
     public DateTime CreatedAt { get; set; }
 
     // Relationships
-    public List<ProductModel> Products { get; set; } = new List<ProductModel>();
+    public List<ProductModel>? Products { get; set; } 
   }
 
 }

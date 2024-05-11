@@ -23,6 +23,6 @@ namespace api.Model
         public DateTime OrderDate { get; set; }
 
         //Relation M-M between Orders and Products
-        public List<OrderItemModel> OrderItems { get; set; }
+        public List<OrderItemModel>? OrderItems { get; set; }
     }
 }

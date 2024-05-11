@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using api.EntityFramework;
 using api.Model;
-using api.Service;
+using api.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controller
@@ -77,10 +77,14 @@ namespace api.Controller
          {
            return ApiResponse.ServerError(ex.Message);
 
+<<<<<<< HEAD
          }}
          
         [HttpPut("{categoryId}")]
         public async Task<IActionResult> UpdateProduct(Guid ProductId, ProductModel updateProduct)
+=======
+        public IActionResult UpdatepProduct(string productId, ProductModel updateProduct)
+>>>>>>> 7636f781c269c3b30565bcfe0a24518d7a6931e8
         {
             try
             {

@@ -1,5 +1,7 @@
 using api.EntityFramework;
+using api.Services;
 using Microsoft.EntityFrameworkCore;
+
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +14,9 @@ GetConnectionString("DefaultConnection")));
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
+
+builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<CategoryService>();
 
 var app = builder.Build();
 

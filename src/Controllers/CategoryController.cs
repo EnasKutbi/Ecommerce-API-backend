@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using api.EntityFramework;
-using api.Service;
+using api.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
@@ -75,6 +76,7 @@ namespace api.Controllers
         }
 
         [HttpPost]
+        // [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateCategory(Category newCategory)
         {
             try
@@ -102,6 +104,7 @@ namespace api.Controllers
 
 
         [HttpPut("{categoryId}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateCategory(Guid categoryId, Category updateCategory)
         {
             try
@@ -130,6 +133,7 @@ namespace api.Controllers
 
 
         [HttpDelete("{categoryId}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteCategory(Guid categoryId)
         {
             try

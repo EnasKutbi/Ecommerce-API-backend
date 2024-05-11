@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using api.EntityFramework;
 using api.Model;
 
@@ -8,6 +9,8 @@ namespace api.Models
   {
     
     public Guid OrderId { get; set; }//Foreign Key
+    
+    [Column("product_id")]
     public Guid ProductId { get; set; }//Foreign Key
    
     

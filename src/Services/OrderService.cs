@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using api.EntityFramework;
 using api.Model;
 
-namespace api.Service
+namespace api.Services
 {
     public class OrderService
     {

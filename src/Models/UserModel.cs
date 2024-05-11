@@ -27,6 +27,6 @@ namespace api.Models
         public bool IsAdmin { get; set; }
         public bool IsBanned { get; set; }
         public DateTime CreatedAt { get; set; }
-        public List<OrderModel> Orders { get; set; } // by Atheer, 1-M relation
+        public List<OrderModel>? Orders { get; set; } // by Atheer, 1-M relation
     }
 }
