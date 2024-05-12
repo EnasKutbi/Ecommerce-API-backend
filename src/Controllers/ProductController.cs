@@ -21,13 +21,12 @@ namespace api.Controller
         }
 
 
-        
         [HttpGet]
         public async Task<IActionResult> GetAllProducts()
         {
 
             var Product = await _productService.GetProducts();
-            return ApiResponse.Success(Product, "All Users are returned successfully");
+            return ApiResponse.Success(Product, "All products are returned successfully");
 
         }
 
@@ -51,31 +50,12 @@ namespace api.Controller
             {
                 Console.WriteLine($"There is an error , can not return the Product");
                 return StatusCode(500, new ErrorResponse { Message = ex.Message });
-            }}
-         [HttpGet("search")] 
-
-        public async Task<IActionResult> SearchProducts(string keyword) 
-
-        { 
-
-            if (string.IsNullOrWhiteSpace(keyword)) 
-
-            { 
-
-                return BadRequest("Keyword is required for search."); 
-
-            } 
-            var products = await _productService.SearchProductsAsync(keyword); 
-
-            return Ok(products); 
-
+            }
         }
-
-       [HttpPost]
-        public async Task<IActionResult> CreateProduct(Product NewProduct)
+        [HttpPut("{ProductId}")]
+        public async Task<IActionResult> CreateProduct(ProductModel NewProduct)
         {
-            try
-            {
+
             if (!ModelState.IsValid)
             {
                 throw new Exception("Invalid User Data");
@@ -85,36 +65,30 @@ namespace api.Controller
             var newProduct = await _productService.CreateProductService(NewProduct);
             return ApiResponse.Created(newProduct, "User created successfully");
 
-            } 
-             catch (Exception ex)
-            {
-                Console.WriteLine($"There is an error , can not delete the Product");
-                return StatusCode(500, new ErrorResponse { Message = ex.Message });
-            }
-
         }
-        
         [HttpPost("AddOrderItem")]
-         public async Task<IActionResult> AddProdetOrder([FromQuery] Guid ProductId ,  [FromQuery]Guid OrderId ){
-         try
-         {
-            await _productService.AddProdetOrder(ProductId,OrderId);
-            return ApiResponse.Created("created");
-         }
-         catch(Exception ex)
-         {
-           return ApiResponse.ServerError(ex.Message);
-         }}
-        [HttpPut("{ProductId}")]
-        public async Task<IActionResult> UpdateProduct(Guid ProductId, ProductModel updateProduct)
+        public async Task<IActionResult> AddProductOrder([FromQuery] Guid ProductId, [FromQuery] Guid OrderId)
+        {
+            try
+            {
+                await _productService.AddProductOrder(ProductId, OrderId);
+                return ApiResponse.Created("created");
+            }
+            catch (Exception ex)
+            {
+                return ApiResponse.ServerError(ex.Message);
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> UpdateProductService(Guid productId, ProductModel updateProduct)
         {
             try
             {
 
-                var Product = await _productService.UpdateProductService(ProductId, updateProduct);
+                var Product = await _productService.UpdateProductService(productId, updateProduct);
                 if (Product == null)
                 {
-                    return NotFound(new ErrorResponse { Message = "There is no product found to update." });
+                    return NotFound(new ErrorResponse { Message = "There is no category found to update." });
                 }
                 else
                 {
@@ -123,7 +97,7 @@ namespace api.Controller
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"There is an error , can not update the product");
+                Console.WriteLine($"There is an error , can not update the category");
                 return StatusCode(500, new ErrorResponse { Message = ex.Message });
             }
         }
@@ -142,7 +116,7 @@ namespace api.Controller
                 {
                     return Ok(new SuccessResponse<Product>
                     {
-                        Message = "Product is deleted succeefully",
+                        Message = "Product is deleted successfully",
                     });
                 }
             }
@@ -154,4 +128,5 @@ namespace api.Controller
 
         }
 
-}}
+    }
+}
