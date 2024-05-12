@@ -3,17 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using api.EntityFramework;
 using api.Helpers;
+using api.Model;
+using api.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 
 namespace api.Services
 {
     public class UserService
     {
         private AppDbContext _appDbContext;
-        public UserService(AppDbContext appDbContext)
+        private readonly IPasswordHasher<User> _passwordHasher;
+        public UserService(AppDbContext appDbContext, IPasswordHasher<User> passwordHasher)
         {
             _appDbContext = appDbContext;
+            _passwordHasher = passwordHasher;
         }
 
         public async Task<IEnumerable<User>> GetAllUsersService()
@@ -63,5 +68,37 @@ namespace api.Services
             }
             return false;
         }
+        public async Task<UserModel?> LoginUserAsync(LoginModel loginModel)
+        {
+
+
+            var user = await _appDbContext.Users.SingleOrDefaultAsync(u => u.Email == loginModel.Email);
+            if (user == null)
+            {
+                return null;
+            }
+
+            var result = _passwordHasher.VerifyHashedPassword(user, user.Password, loginModel.Password);
+            if (result == PasswordVerificationResult.Failed)
+            {
+                return null;
+            }
+
+            var userModel = new UserModel
+            {
+                UserId = user.UserId,
+                Name = user.Name,
+                Email = user.Email,
+                Password = user.Password,
+                Address = user.Address,
+                Image = user.Image,
+                IsAdmin = user.IsAdmin,
+                IsBanned = user.IsBanned,
+            };
+
+            return userModel;
+
+        }
+
     }
 }

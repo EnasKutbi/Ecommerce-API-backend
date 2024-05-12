@@ -4,7 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using api.EntityFramework;
 using api.Model;
+using api.Models;
 using api.Services;
+using api.Controller;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
@@ -14,9 +18,11 @@ namespace api.Controllers
     public class UserController : ControllerBase
     {
         private readonly UserService _userService;
-        public UserController(AppDbContext appDbContext)
+        private readonly AuthService _authService;
+        public UserController(UserService userService, AuthService authService)
         {
-            _userService = new UserService(appDbContext);
+            _userService = userService;
+            _authService = authService;
         }
 
         [HttpGet]
@@ -89,7 +95,26 @@ namespace api.Controllers
             }
         }
 
-        
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginModel loginModel)
+        {
+            try
+            {
+                var user = await _userService.LoginUserAsync(loginModel);
+                if (user == null)
+                {
+                    return ApiResponse.NotFound("User not found or invalid credentials");
+                }
+
+                var token = _authService.GenerateJwt(user);
+
+                return ApiResponse.Success(new { Token = token, User = user }, "User logged in successfully");
+            }
+            catch (Exception ex)
+            {
+                return ApiResponse.ServerError($"Internal server error: {ex.Message}");
+            }
+        }
 
         [HttpPut("{userId}")]
         public async Task<IActionResult> UpdateUser(Guid userId, User updateUser)
@@ -134,5 +159,27 @@ namespace api.Controllers
                 return StatusCode(500, new ErrorResponse { Success = false, Message = ex.Message });
             }
         }
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet("profile")]
+        public async Task<IActionResult> GetUserProfile(Guid userId)
+        {
+            var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            Console.WriteLine($"{userIdString}");
+            if (string.IsNullOrEmpty(userIdString))
+            {
+                return ApiResponse.Unauthorized("User Id is missing from token");
+            }
+
+            if (!Guid.TryParse(userIdString, out userId))
+            {
+                return ApiResponse.BadRequest("Invalid User Id");
+            }
+            var user = await _userService.GetUserById(userId);
+
+            return ApiResponse.Success(user, "User profile is returned successfully");
+
+        }
+
     }
 }

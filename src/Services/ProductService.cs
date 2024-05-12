@@ -5,7 +5,6 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using api.DTOs;
 using api.EntityFramework;
-using api.Helpers;
 using api.Model;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,9 +20,12 @@ namespace api.Services
             this.appDbContext = appDbContext;
 
         }
+
         public async Task <PaginationDto<ProductModel>> GetProducts(int pageNumber, int pageSize)
+
         {
             var totalProductCount = await appDbContext.Products.CountAsync();
+
 
             var products = await appDbContext.Products
             .Select(p => new ProductModel
@@ -54,62 +56,52 @@ namespace api.Services
                //.Include(product => product.OrderItems)
                //.ThenInclude(orderItem => orderItem.Product)
             //.ToListAsync();//using appContext to return all product on table
+
         }
 
         public async Task<Product?> GetProductById(Guid ProductId)
-    {
-        return await appDbContext.Products.Include(Product => Product.Category)
-        .Include(product => product.OrderItems)
-               .ThenInclude(orderItem => orderItem.Product)
-        .FirstOrDefaultAsync(Product => Product.Id == ProductId);
-    }
-    public async Task<IEnumerable<Product>> SearchProductsAsync(string keyword) 
-
-        { 
-
-             return await appDbContext.Products 
-                .Where(p => p.Name.Contains(keyword)) 
-                .ToListAsync(); 
-
+        {
+            return await appDbContext.Products.Include(Product => Product.Category)
+            .Include(product => product.OrderItems)
+                   .ThenInclude(orderItem => orderItem.Product)
+            .FirstOrDefaultAsync(Product => Product.Id == ProductId);
         }
-         public async Task<Product> CreateProductService(Product NewProduct)
+        public async Task<Product> CreateProductService(ProductModel NewProduct)
         {
 
-           
-            
-                NewProduct.Id = Guid.NewGuid();
-                NewProduct.Name = NewProduct.Name;
-                NewProduct.Slug = NewProduct.Slug;
-                NewProduct.ImageUrl = NewProduct.ImageUrl;
-                NewProduct.Description = NewProduct.Description;
-                NewProduct.Price = NewProduct.Price;
-                NewProduct.Quantity = NewProduct.Quantity;
-                NewProduct.Sold = NewProduct.Sold;
-                NewProduct.Shipping = NewProduct.Shipping;
-                NewProduct.CreatedAt =DateTime.UtcNow;
-                appDbContext.Products.Add(NewProduct);
-                await appDbContext.SaveChangesAsync();
-                return NewProduct;
+            var product = new Product
+            {
+                Id = Guid.NewGuid(),
+                Name = NewProduct.Name,
+                Slug = NewProduct.Slug,
+                ImageUrl = NewProduct.ImageUrl,
+                Description = NewProduct.Description,
+                Price = NewProduct.Price,
+                Quantity = NewProduct.Quantity,
+                Sold = NewProduct.Sold,
+                Shipping = NewProduct.Shipping,
+                CreatedAt = NewProduct.CreatedAt
+            };
+            appDbContext.Products.Add(product);
+            await appDbContext.SaveChangesAsync();
+            return product;
         }
-            
-        public async Task AddProdetOrder(Guid ProductId, Guid OrderId){
-         var orderItem = new OrderItem
-      {
-        
-        OrderId = OrderId,
-        ProductId = ProductId
-        
-        
-      };
+        public async Task AddProductOrder(Guid ProductId, Guid OrderId)
+        {
+            var orderItem = new OrderItem
+            {
+                OrderId = OrderId,
+                ProductId = ProductId
+            };
 
-      await appDbContext.OrderItems.AddAsync(orderItem);
-      await appDbContext.SaveChangesAsync();
+            await appDbContext.OrderItems.AddAsync(orderItem);
+            await appDbContext.SaveChangesAsync();
         }
-        public async Task<Product?> UpdateProductService(Guid ProductId, ProductModel updatpoduct)
-    {
+        public async Task<Product?> UpdateProductService(Guid ProductId, ProductModel updateProduct)
+        {
             //     //create record 
             var productUpdated = appDbContext.Products
-            .Include(product=>product.Category)
+            .Include(product => product.Category)
             .Include(product => product.OrderItems)
             .ThenInclude(orderItem => orderItem.Product)
             .FirstOrDefault(product =>
@@ -117,27 +109,22 @@ namespace api.Services
             {
                 if (productUpdated != null)
                 {
-                    productUpdated.Name = updatpoduct.Name ;
-                    productUpdated.Slug = updatpoduct.Slug ;
-                    productUpdated.ImageUrl = updatpoduct.ImageUrl ;
-                    productUpdated.Description = updatpoduct.Description ;
-                    productUpdated.Quantity = updatpoduct.Quantity;
-                    productUpdated.Sold = updatpoduct.Sold;
-                    productUpdated.Shipping = updatpoduct.Shipping;
-                    productUpdated.CategoryId = updatpoduct.CategoryId;
-
-
+                    productUpdated.Name = updateProduct.Name;
+                    productUpdated.Slug = updateProduct.Slug;
+                    productUpdated.ImageUrl = updateProduct.ImageUrl;
+                    productUpdated.Description = updateProduct.Description;
+                    productUpdated.Quantity = updateProduct.Quantity;
+                    productUpdated.Sold = updateProduct.Sold;
+                    productUpdated.Shipping = updateProduct.Shipping;
+                    productUpdated.CategoryId = updateProduct.CategoryId;
                 }
-                 appDbContext.SaveChanges();
-                return  productUpdated;
-
-
-
+                appDbContext.SaveChanges();
+                return productUpdated;
             }
         }
         public async Task<bool> DeleteProductService(Guid ProductId)
         {
-            
+
             var ProductToRemove = appDbContext.Products.FirstOrDefault(P => P.Id == ProductId);
             if (ProductToRemove != null)
             {
@@ -147,12 +134,5 @@ namespace api.Services
             }
             return false;
         }
-        
-
-
     }
-
-
 }
-
-
