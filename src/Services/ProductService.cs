@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using api.DTOs;
 using api.EntityFramework;
 using api.Model;
 using Microsoft.EntityFrameworkCore;
@@ -19,14 +20,39 @@ namespace api.Services
             this.appDbContext = appDbContext;
 
         }
-        public async Task <List<Product>> GetProducts()
+        public async Task <PaginationDto<ProductModel>> GetProducts(int pageNumber, int pageSize)
         {
+            var totalProductCount = await appDbContext.Products.CountAsync();
 
-             return await appDbContext.Products
-               .Include(product => product.Category)
-               .Include(product => product.OrderItems)
-               .ThenInclude(orderItem => orderItem.Product)
-            .ToListAsync();//using appContext to return all product on table
+            var products = await appDbContext.Products
+            .Select(p => new ProductModel
+            {
+                
+                Name = p.Name,
+                Slug = p.Slug,
+                ImageUrl = p.ImageUrl,
+                Description = p.Description,
+                Sold = p.Sold,
+                Price = p.Price,
+                Quantity = p.Quantity,
+                Shipping = p.Shipping,
+            })
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+            return new PaginationDto<ProductModel>
+            {
+                Items = products,
+                TotalCount = totalProductCount,
+                PageNumber = pageNumber,
+                PageSize = pageSize
+            };
+
+             //return await appDbContext.Products
+               //.Include(product => product.Category)
+               //.Include(product => product.OrderItems)
+               //.ThenInclude(orderItem => orderItem.Product)
+            //.ToListAsync();//using appContext to return all product on table
         }
 
         public async Task<Product?> GetProductById(Guid ProductId)
