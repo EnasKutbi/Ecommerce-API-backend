@@ -23,7 +23,10 @@ builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<ProductService>();
 builder.Services.AddScoped<OrderService>();
 builder.Services.AddScoped<CategoryService>();
-// builder.Services.AddScoped<OrderItemService>();
+
+//builder.Services.AddScoped<OrderItemService>();
+builder.Services.AddScoped<ProductService>();
+
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 

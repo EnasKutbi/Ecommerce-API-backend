@@ -7,7 +7,7 @@ namespace api.EntityFramework
   [Table("OrderItem")]
   public class OrderItem
   {
-    
+
     // [ForeignKey("OrderId")]
     [Key]
     public Guid OrderId { get; set; }
@@ -22,7 +22,7 @@ namespace api.EntityFramework
     public int Quantity { get; set; }
 
     // Relationships
-  
+
     public Order Order { get; set; }
 
     public Product Product { get; set; }
