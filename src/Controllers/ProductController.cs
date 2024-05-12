@@ -22,10 +22,10 @@ namespace api.Controller
 
 
         [HttpGet]
-        public async Task<IActionResult> GetAllProducts()
+        public async Task<IActionResult> GetAllProducts([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 3)
         {
 
-            var Product = await _productService.GetProducts();
+            var Product = await _productService.GetProducts(pageNumber, pageSize);
             return ApiResponse.Success(Product, "All products are returned successfully");
 
         }

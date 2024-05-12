@@ -134,5 +134,12 @@ namespace api.Services
             }
             return false;
         }
+
+        public async Task<IEnumerable<Product>> SearchProductsAsync(string keyword)
+        {
+            return await appDbContext.Products
+               .Where(p => p.Name.Contains(keyword))
+               .ToListAsync();
+        }
     }
 }
