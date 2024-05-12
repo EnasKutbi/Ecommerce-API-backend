@@ -4,6 +4,7 @@ using api.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Identity;
 
 
 
@@ -19,9 +20,12 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 
 builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<ProductService>();
+builder.Services.AddScoped<OrderService>();
 builder.Services.AddScoped<CategoryService>();
-builder.Services.AddScoped<OrderItemService>();
+// builder.Services.AddScoped<OrderItemService>();
 builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 
 var Configuration = builder.Configuration;
 var key = Encoding.ASCII.GetBytes(Configuration["Jwt:Key"]);

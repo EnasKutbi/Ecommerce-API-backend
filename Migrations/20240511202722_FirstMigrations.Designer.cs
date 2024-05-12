@@ -12,8 +12,8 @@ using api.EntityFramework;
 namespace Backend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240510173633_TableOrderItems4")]
-    partial class TableOrderItems4
+    [Migration("20240511202722_FirstMigrations")]
+    partial class FirstMigrations
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -82,9 +82,6 @@ namespace Backend.Migrations
                     b.Property<int>("OrderTotal")
                         .HasColumnType("integer");
 
-                    b.Property<Guid>("ProductId")
-                        .HasColumnType("uuid");
-
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
 
@@ -98,16 +95,10 @@ namespace Backend.Migrations
             modelBuilder.Entity("api.EntityFramework.OrderItem", b =>
                 {
                     b.Property<Guid>("OrderId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("order_id");
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("ProductId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("product_id");
-
-                    b.Property<Guid>("OrderItemId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("orderItem_id");
+                        .HasColumnType("uuid");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("integer")
@@ -128,7 +119,8 @@ namespace Backend.Migrations
                         .HasDefaultValueSql("uuid_generate_v4()");
 
                     b.Property<Guid>("CategoryId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("category_id");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -155,7 +147,8 @@ namespace Backend.Migrations
                         .HasColumnType("integer");
 
                     b.Property<double>("Shipping")
-                        .HasColumnType("double precision");
+                        .HasColumnType("double precision")
+                        .HasColumnName("shipping");
 
                     b.Property<string>("Slug")
                         .IsRequired()
