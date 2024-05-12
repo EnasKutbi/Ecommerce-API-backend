@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using api.DTOs;
 using api.EntityFramework;
+using api.Helpers;
 using api.Model;
 using Microsoft.EntityFrameworkCore;
 
@@ -62,26 +63,35 @@ namespace api.Services
                .ThenInclude(orderItem => orderItem.Product)
         .FirstOrDefaultAsync(Product => Product.Id == ProductId);
     }
-         public async Task<Product> CreateProductService(ProductModel NewProduct)
+    public async Task<IEnumerable<Product>> SearchProductsAsync(string keyword) 
+
+        { 
+
+             return await appDbContext.Products 
+                .Where(p => p.Name.Contains(keyword)) 
+                .ToListAsync(); 
+
+        }
+         public async Task<Product> CreateProductService(Product NewProduct)
         {
 
-            var product = new Product
-            {
-                Id = Guid.NewGuid(),
-                Name = NewProduct.Name,
-                Slug = NewProduct.Slug,
-                ImageUrl = NewProduct.ImageUrl,
-                Description = NewProduct.Description,
-                Price = NewProduct.Price,
-                Quantity = NewProduct.Quantity,
-                Sold = NewProduct.Sold,
-                Shipping = NewProduct.Shipping,
-                CreatedAt = NewProduct.CreatedAt
-            };
-            appDbContext.Products.Add(product);
-           await appDbContext.SaveChangesAsync();
-            return product;
+           
+            
+                NewProduct.Id = Guid.NewGuid();
+                NewProduct.Name = NewProduct.Name;
+                NewProduct.Slug = NewProduct.Slug;
+                NewProduct.ImageUrl = NewProduct.ImageUrl;
+                NewProduct.Description = NewProduct.Description;
+                NewProduct.Price = NewProduct.Price;
+                NewProduct.Quantity = NewProduct.Quantity;
+                NewProduct.Sold = NewProduct.Sold;
+                NewProduct.Shipping = NewProduct.Shipping;
+                NewProduct.CreatedAt =DateTime.UtcNow;
+                appDbContext.Products.Add(NewProduct);
+                await appDbContext.SaveChangesAsync();
+                return NewProduct;
         }
+            
         public async Task AddProdetOrder(Guid ProductId, Guid OrderId){
          var orderItem = new OrderItem
       {

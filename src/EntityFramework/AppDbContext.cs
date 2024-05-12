@@ -39,10 +39,10 @@ namespace api.EntityFramework
             {
                 entity.HasKey(p => p.Id);
                 entity.Property(p => p.Id).HasDefaultValueSql("uuid_generate_v4()");
-                entity.Property(p => p.Name).IsRequired().HasMaxLength(100);
-                entity.Property(p => p.Slug).IsRequired().HasMaxLength(100);
+                entity.Property(p => p.Name).IsRequired().HasMaxLength(300);
+                entity.Property(p => p.Slug).HasMaxLength(300);
                 entity.Property(p => p.ImageUrl);
-                entity.Property(p => p.Description);
+                entity.Property(p => p.Description).HasMaxLength(300);;
                 entity.Property(p => p.Price).IsRequired();
                 entity.Property(p => p.Quantity);
                 entity.Property(p => p.Sold);
