@@ -13,11 +13,11 @@ namespace api.Services
         }
     public async Task<IEnumerable<Category>> GetAllCategoryService()
     {
-        return await _appDbContext.Categories.Include(p => p.Products).ToListAsync();
+        return await _appDbContext.Categories.ToListAsync();
     }
     public async Task<Category?> GetCategoryById(Guid categoryId)
     {
-        return await _appDbContext.Categories.Include(p => p.Products).FirstOrDefaultAsync(category => category.CategoryId == categoryId);
+        return await _appDbContext.Categories.FirstOrDefaultAsync(category => category.CategoryId == categoryId);
     }
     public async Task<Category> CreateCategoryService(Category newCategory)
     {

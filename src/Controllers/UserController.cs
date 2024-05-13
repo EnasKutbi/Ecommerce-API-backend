@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using api.EntityFramework;
-using api.Model;
 using api.Models;
 using api.Services;
-using api.Controller;
+using api.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
@@ -37,7 +36,7 @@ namespace api.Controllers
                 }
                 else
                 {
-                    return Ok(new SuccessResponse<IEnumerable<User>> { Success = true, Message = "all users are returned successfully", Data = users });
+                    return Ok(new SuccessResponse<IEnumerable<UserDto>> { Success = true, Message = "all users are returned successfully", Data = users });
                 }
             }
             catch (Exception ex)
@@ -48,6 +47,7 @@ namespace api.Controllers
         }
 
         [HttpGet("{userId}")]
+        // [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetUser(Guid userId)
         {
             try
@@ -96,24 +96,18 @@ namespace api.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginModel loginModel)
+        public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
         {
-            try
-            {
-                var user = await _userService.LoginUserAsync(loginModel);
-                if (user == null)
+                if (!ModelState.IsValid)
                 {
-                    return ApiResponse.NotFound("User not found or invalid credentials");
+                    return ApiResponse.BadRequest("Invalid User Data");
                 }
+                var loggedInUser = await _userService.LoginUserAsync(loginDto);
 
-                var token = _authService.GenerateJwt(user);
+                var token = _authService.GenerateJwt(loggedInUser);
 
-                return ApiResponse.Success(new { Token = token, User = user }, "User logged in successfully");
-            }
-            catch (Exception ex)
-            {
-                return ApiResponse.ServerError($"Internal server error: {ex.Message}");
-            }
+
+                return ApiResponse.Success(new { token, loggedInUser }, "User Logged In successfully");
         }
 
         [HttpPut("{userId}")]

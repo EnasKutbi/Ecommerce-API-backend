@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using api.EntityFramework;
 
 
-namespace api.Model
+namespace api.Models
 {
   public class CategoryModel
   {

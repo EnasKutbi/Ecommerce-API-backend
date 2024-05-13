@@ -5,15 +5,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using api.Models;
 
-
-
-namespace api.Model
-
+namespace api.Models
 {
     public class ProductModel
     {
 
-        public Guid Id { get; set; }
+        public Guid ProductId { get; set; }
         [Required(ErrorMessage = "Product name is required!")]
         [MinLength(5, ErrorMessage = "product name must be at least 5 characters long.")]
         [MaxLength(50, ErrorMessage = "product name must be at  50 characters long.")]

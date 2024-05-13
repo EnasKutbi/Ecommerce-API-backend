@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using api.DTOs;
 using api.EntityFramework;
-using api.Model;
+using api.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace api.Services
@@ -13,24 +13,23 @@ namespace api.Services
 
     public class ProductService
     {
-
-        private AppDbContext appDbContext;
+        private AppDbContext _appDbContext;
         public ProductService(AppDbContext appDbContext)
         {
-            this.appDbContext = appDbContext;
+            _appDbContext = appDbContext;
 
         }
 
         public async Task <PaginationDto<ProductModel>> GetProducts(int pageNumber, int pageSize)
 
         {
-            var totalProductCount = await appDbContext.Products.CountAsync();
+            var totalProductCount = await _appDbContext.Products.CountAsync();
 
 
-            var products = await appDbContext.Products
+            var products = await _appDbContext.Products
             .Select(p => new ProductModel
             {
-                
+                ProductId = p.ProductId,
                 Name = p.Name,
                 Slug = p.Slug,
                 ImageUrl = p.ImageUrl,
@@ -59,53 +58,51 @@ namespace api.Services
 
         }
 
-        public async Task<Product?> GetProductById(Guid ProductId)
+        public async Task<Product?> GetProductById(Guid productId)
         {
-            return await appDbContext.Products.Include(Product => Product.Category)
-            .Include(product => product.OrderItems)
-                   .ThenInclude(orderItem => orderItem.Product)
-            .FirstOrDefaultAsync(Product => Product.Id == ProductId);
+            return await _appDbContext.Products.FirstOrDefaultAsync(p => p.ProductId == productId);
         }
-        public async Task<Product> CreateProductService(ProductModel NewProduct)
+        public async Task<Product> CreateProductService(Product newProduct)
         {
+            newProduct.ProductId = Guid.NewGuid();
+            newProduct.CreatedAt = DateTime.UtcNow;
+            _appDbContext.Products.Add(newProduct);
+            await _appDbContext.SaveChangesAsync();
+            return newProduct;
 
-            var product = new Product
-            {
-                Id = Guid.NewGuid(),
-                Name = NewProduct.Name,
-                Slug = NewProduct.Slug,
-                ImageUrl = NewProduct.ImageUrl,
-                Description = NewProduct.Description,
-                Price = NewProduct.Price,
-                Quantity = NewProduct.Quantity,
-                Sold = NewProduct.Sold,
-                Shipping = NewProduct.Shipping,
-                CreatedAt = NewProduct.CreatedAt
-            };
-            appDbContext.Products.Add(product);
-            await appDbContext.SaveChangesAsync();
-            return product;
+            // var product = new Product
+            // {
+            //     Id = Guid.NewGuid(),
+            //     Name = newProduct.Name,
+            //     Slug = newProduct.Slug,
+            //     ImageUrl = newProduct.ImageUrl,
+            //     Description = newProduct.Description,
+            //     Price = newProduct.Price,
+            //     Quantity = newProduct.Quantity,
+            //     Sold = newProduct.Sold,
+            //     Shipping = newProduct.Shipping,
+            //     CreatedAt = newProduct.CreatedAt
+            // };
+            // _appDbContext.Products.Add(newProduct);
+            // await _appDbContext.SaveChangesAsync();
+            // return newProduct;
         }
-        public async Task AddProductOrder(Guid ProductId, Guid OrderId)
-        {
-            var orderItem = new OrderItem
-            {
-                OrderId = OrderId,
-                ProductId = ProductId
-            };
+        // public async Task AddProductOrder(Guid ProductId, Guid OrderId)
+        // {
+        //     var orderItem = new OrderItem
+        //     {
+        //         OrderId = OrderId,
+        //         ProductId = ProductId
+        //     };
 
-            await appDbContext.OrderItems.AddAsync(orderItem);
-            await appDbContext.SaveChangesAsync();
-        }
-        public async Task<Product?> UpdateProductService(Guid ProductId, ProductModel updateProduct)
+        //     await _appDbContext.OrderItems.AddAsync(orderItem);
+        //     await _appDbContext.SaveChangesAsync();
+        // }
+        public async Task<Product?> UpdateProductService(Guid productId, Product updateProduct)
         {
             //     //create record 
-            var productUpdated = appDbContext.Products
-            .Include(product => product.Category)
-            .Include(product => product.OrderItems)
-            .ThenInclude(orderItem => orderItem.Product)
-            .FirstOrDefault(product =>
-            product.Id == ProductId);
+            var productUpdated = await _appDbContext.Products.FirstOrDefaultAsync(p =>
+            p.ProductId == productId);
             {
                 if (productUpdated != null)
                 {
@@ -118,18 +115,18 @@ namespace api.Services
                     productUpdated.Shipping = updateProduct.Shipping;
                     productUpdated.CategoryId = updateProduct.CategoryId;
                 }
-                appDbContext.SaveChanges();
+                await _appDbContext.SaveChangesAsync();
                 return productUpdated;
             }
         }
-        public async Task<bool> DeleteProductService(Guid ProductId)
+        public async Task<bool> DeleteProductService(Guid productId)
         {
 
-            var ProductToRemove = appDbContext.Products.FirstOrDefault(P => P.Id == ProductId);
-            if (ProductToRemove != null)
+            var productToRemove = _appDbContext.Products.FirstOrDefault(p => p.ProductId == productId);
+            if (productToRemove != null)
             {
-                appDbContext.Products.Remove(ProductToRemove);
-                await appDbContext.SaveChangesAsync();
+                _appDbContext.Products.Remove(productToRemove);
+                await _appDbContext.SaveChangesAsync();
                 return true;
             }
             return false;
@@ -137,7 +134,7 @@ namespace api.Services
 
         public async Task<IEnumerable<Product>> SearchProductsAsync(string keyword)
         {
-            return await appDbContext.Products
+            return await _appDbContext.Products
                .Where(p => p.Name.Contains(keyword))
                .ToListAsync();
         }
