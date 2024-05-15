@@ -44,6 +44,7 @@ namespace api.Services
         public async Task<User> CreateUserService(User newUser)
         {
             newUser.UserId = Guid.NewGuid();
+            newUser.Password = _passwordHasher.HashPassword(null, newUser.Password);
             newUser.CreatedAt = DateTime.UtcNow;
             _appDbContext.Users.Add(newUser);
             await _appDbContext.SaveChangesAsync();

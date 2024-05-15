@@ -5,6 +5,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Identity;
+// using api.Middlewares;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Filters;
 
 
 
@@ -52,6 +55,22 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = JwtBearerDefaults.AuthenticationScheme,
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = ""
+    });
+    options.OperationFilter<SecurityRequirementsOperationFilter>();
+});
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -59,8 +78,10 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseDeveloperExceptionPage();
 }
 
 app.UseHttpsRedirection();
 app.MapControllers().WithParameterValidation();
+// app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.Run();
