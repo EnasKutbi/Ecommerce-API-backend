@@ -7,28 +7,24 @@ namespace api.EntityFramework
     [Table("Users")]
     public class User
     {
-        [Key]
-        [Required]
         public Guid UserId { get; set; }
 
-        [Required]
-        public string Name { get; set; }
+        public required string Name { get; set; }
 
-        [Required]
-        public string Email { get; set; }
+        public required string Email { get; set; }
 
-        [Required]
-        public string Password { get; set; }
+        public required string Password { get; set; }
 
         public string Address { get; set; } = string.Empty;
 
         public string Image { get; set; } = string.Empty;
 
-        public bool IsAdmin { get; set; }
+        public bool IsAdmin { get; set; } = false;
 
-        public bool IsBanned { get; set; }
+        public bool IsBanned { get; set; } = false;
 
-        public DateTime CreatedAt { get; set; }
-        public List<Order>? Orders { get; set; } // By Atheer
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow; 
+        
+        public List<Order> Orders { get; set; } = new List<Order>();
     }
 }

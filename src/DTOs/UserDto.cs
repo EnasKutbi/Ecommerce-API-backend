@@ -19,6 +19,6 @@ namespace api.Dtos
         public bool IsBanned { get; set; } = false;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        public List<OrderModel>? Orders { get; set; } = new List<OrderModel>();
+        public List<OrderModel> Orders { get; set; } = new List<OrderModel>();
     }
 }

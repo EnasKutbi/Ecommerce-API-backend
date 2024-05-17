@@ -23,9 +23,9 @@ namespace api.Models
         public required string Password { get; set; }
         public string Address { get; set; } = string.Empty;
         public string Image { get; set; } = string.Empty;
-        public bool IsAdmin { get; set; }
-        public bool IsBanned { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public List<OrderModel>? Orders { get; set; } // by Atheer, 1-M relation
+        // public bool IsAdmin { get; set; } = false;
+        // public bool IsBanned { get; set; } = false;
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public List<OrderModel> Orders { get; set; } // by Atheer, 1-M relation
     }
 }

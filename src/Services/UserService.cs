@@ -5,6 +5,7 @@ using api.EntityFramework;
 using api.Helpers;
 using api.Models;
 using api.Dtos;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
@@ -15,54 +16,57 @@ namespace api.Services
     {
         private AppDbContext _appDbContext;
         private readonly IPasswordHasher<User> _passwordHasher;
-        public UserService(AppDbContext appDbContext, IPasswordHasher<User> passwordHasher)
+        private readonly IMapper _mapper;
+        public UserService(AppDbContext appDbContext, IPasswordHasher<User> passwordHasher, IMapper mapper)
         {
             _appDbContext = appDbContext;
             _passwordHasher = passwordHasher;
+            _mapper = mapper;
         }
 
         public async Task<IEnumerable<UserDto>> GetAllUsersService()
         {
-            var users = await _appDbContext.Users.ToListAsync();
-            return users.Select(user => new UserDto
+            var users = await _appDbContext.Users.Select(user => _mapper.Map<UserDto>(user)).ToListAsync();
+            return users;
+        }
+
+        public async Task<UserDto?> GetUserById(Guid userId)
+        {
+            var user = await _appDbContext.Users.FindAsync(userId);
+            var userDto = _mapper.Map<UserDto>(user);
+            return userDto;
+            // return await _appDbContext.Users.FirstOrDefaultAsync(user => user.UserId == userId);
+        }
+
+        public async Task<User?> CreateUserService(UserModel newUser)
+        {
+            User createUser = new User
             {
-                UserId = user.UserId,
-                Name = user.Name,
-                Email = user.Email,
-                Address = user.Address,
-                Image = user.Image,
-                IsAdmin = user.IsAdmin,
-                IsBanned = user.IsBanned
-            });
-        }
-
-        public async Task<User?> GetUserById(Guid userId)
-        {
-            return await _appDbContext.Users.FirstOrDefaultAsync(user => user.UserId == userId);
-        }
-
-        public async Task<User> CreateUserService(User newUser)
-        {
-            newUser.UserId = Guid.NewGuid();
-            newUser.Password = _passwordHasher.HashPassword(null, newUser.Password);
-            newUser.CreatedAt = DateTime.UtcNow;
-            _appDbContext.Users.Add(newUser);
+                Name = newUser.Name,
+                Email = newUser.Email,
+                Password = _passwordHasher.HashPassword(null, newUser.Password),
+                CreatedAt = DateTime.UtcNow,
+                Address = newUser.Address,
+                Image = newUser.Image
+            };
+            // newUser.UserId = Guid.NewGuid();
+            // newUser.Password = _passwordHasher.HashPassword(null, newUser.Password);
+            // newUser.CreatedAt = DateTime.UtcNow;
+            _appDbContext.Users.Add(createUser);
             await _appDbContext.SaveChangesAsync();
-            return newUser;
+            return createUser;
         }
 
-        public async Task<User?> UpdateUserService(Guid userId, User updateUser)
+        public async Task<User?> UpdateUserService(Guid userId, UserModel updateUser)
         {
             var existingUser = await _appDbContext.Users.FirstOrDefaultAsync(u => u.UserId == userId);
             if (existingUser != null)
             {
                 existingUser.Name = updateUser.Name;
                 existingUser.Email = updateUser.Email;
-                existingUser.Password = updateUser.Password;
+                existingUser.Password = _passwordHasher.HashPassword(null, updateUser.Password);
                 existingUser.Address = updateUser.Address;
                 existingUser.Image = updateUser.Image;
-                existingUser.IsAdmin = updateUser.IsAdmin;
-                existingUser.IsBanned = updateUser.IsBanned;
             }
             await _appDbContext.SaveChangesAsync();
             return existingUser;

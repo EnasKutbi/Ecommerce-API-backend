@@ -47,7 +47,7 @@ namespace api.Controllers
         }
 
         [HttpGet("{userId}")]
-        // [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetUser(Guid userId)
         {
             try
@@ -59,7 +59,7 @@ namespace api.Controllers
                 }
                 else
                 {
-                    return Ok(new SuccessResponse<User> { Success = true, Message = "user is returned successfully", Data = user });
+                    return Ok(new SuccessResponse<UserDto> { Success = true, Message = "user is returned successfully", Data = user });
                 }
             }
             catch (Exception ex)
@@ -70,7 +70,7 @@ namespace api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateUser(User newUser)
+        public async Task<IActionResult> CreateUser(UserModel newUser)
         {
             try
             {
@@ -111,7 +111,7 @@ namespace api.Controllers
         }
 
         [HttpPut("{userId}")]
-        public async Task<IActionResult> UpdateUser(Guid userId, User updateUser)
+        public async Task<IActionResult> UpdateUser(Guid userId, UserModel updateUser)
         {
             try
             {
@@ -159,7 +159,6 @@ namespace api.Controllers
         public async Task<IActionResult> GetUserProfile(Guid userId)
         {
             var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            Console.WriteLine($"{userIdString}");
             if (string.IsNullOrEmpty(userIdString))
             {
                 return ApiResponse.Unauthorized("User Id is missing from token");
