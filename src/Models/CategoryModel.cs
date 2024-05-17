@@ -26,10 +26,10 @@ namespace api.Models
     public string Description { get; set; } = string.Empty;
 
     [Column("createdAt")]
-    public DateTime CreatedAt { get; set; }
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     // Relationships
-    public List<ProductModel>? Products { get; set; } 
+    public List<ProductModel> Products { get; set; } 
   }
 
 }
