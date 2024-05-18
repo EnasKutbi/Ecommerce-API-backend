@@ -13,14 +13,11 @@ namespace api.Models
         public Guid OrderId { get; set; }
         [Required]
         public Guid UserId { get; set; } // foreign key to users table
-    
-        // [Required]
-        // public Guid ProductId { get; set; } // foreign key to products table
         [Required]
         public string OrderStatus { get; set; }
         [Required]
         public int OrderTotal { get; set; }
-        public DateTime OrderDate { get; set; }
+        public DateTime OrderDate { get; set; } = DateTime.UtcNow;
 
         public UserModel? User { get; set; } // 1-1 relation
 

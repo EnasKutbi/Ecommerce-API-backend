@@ -76,7 +76,7 @@ namespace api.Controllers
         }
 
         [HttpPost]
-        // [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateCategory(Category newCategory)
         {
             try
@@ -104,7 +104,7 @@ namespace api.Controllers
 
 
         [HttpPut("{categoryId}")]
-        // [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateCategory(Guid categoryId, Category updateCategory)
         {
             try
@@ -133,7 +133,7 @@ namespace api.Controllers
 
 
         [HttpDelete("{categoryId}")]
-        // [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteCategory(Guid categoryId)
         {
             try

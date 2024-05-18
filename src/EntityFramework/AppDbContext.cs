@@ -30,7 +30,7 @@ namespace api.EntityFramework
                 entity.Property(o => o.OrderStatus).IsRequired();
                 entity.Property(o => o.OrderTotal).IsRequired();
                 entity.Property(o => o.OrderDate).IsRequired().HasDefaultValueSql("CURRENT_TIMESTAMP");
-            
+
             });
 
             //----------------- Product (Nouir) --------------------

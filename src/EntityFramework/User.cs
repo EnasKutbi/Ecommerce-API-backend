@@ -23,8 +23,8 @@ namespace api.EntityFramework
 
         public bool IsBanned { get; set; } = false;
 
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow; 
-        
-        public List<Order> Orders { get; set; } = new List<Order>();
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        public List<Order>? Orders { get; set; } = new List<Order>();
     }
 }

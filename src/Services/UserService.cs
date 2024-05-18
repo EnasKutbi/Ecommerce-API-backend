@@ -35,7 +35,6 @@ namespace api.Services
             var user = await _appDbContext.Users.FindAsync(userId);
             var userDto = _mapper.Map<UserDto>(user);
             return userDto;
-            // return await _appDbContext.Users.FirstOrDefaultAsync(user => user.UserId == userId);
         }
 
         public async Task<User?> CreateUserService(UserModel newUser)
@@ -49,9 +48,6 @@ namespace api.Services
                 Address = newUser.Address,
                 Image = newUser.Image
             };
-            // newUser.UserId = Guid.NewGuid();
-            // newUser.Password = _passwordHasher.HashPassword(null, newUser.Password);
-            // newUser.CreatedAt = DateTime.UtcNow;
             _appDbContext.Users.Add(createUser);
             await _appDbContext.SaveChangesAsync();
             return createUser;

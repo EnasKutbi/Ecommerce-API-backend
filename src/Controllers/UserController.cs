@@ -98,16 +98,16 @@ namespace api.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
         {
-                if (!ModelState.IsValid)
-                {
-                    return ApiResponse.BadRequest("Invalid User Data");
-                }
-                var loggedInUser = await _userService.LoginUserAsync(loginDto);
+            if (!ModelState.IsValid)
+            {
+                return ApiResponse.BadRequest("Invalid User Data");
+            }
+            var loggedInUser = await _userService.LoginUserAsync(loginDto);
 
-                var token = _authService.GenerateJwt(loggedInUser);
+            var token = _authService.GenerateJwt(loggedInUser);
 
 
-                return ApiResponse.Success(new { token, loggedInUser }, "User Logged In successfully");
+            return ApiResponse.Success(new { token, loggedInUser }, "User Logged In successfully");
         }
 
         [HttpPut("{userId}")]

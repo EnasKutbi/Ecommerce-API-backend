@@ -24,10 +24,10 @@ namespace api.EntityFramework
         public string Description { get; set; } = string.Empty;
 
         [Column("created_at")]
-        public DateTime CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         // Relationships
-        public List<Product> Products { get; set; }
+        public List<Product>? Products { get; set; }
 
     }
 

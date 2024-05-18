@@ -29,7 +29,7 @@ namespace api.Models
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     // Relationships
-    public List<ProductModel> Products { get; set; } 
+    public List<ProductModel>? Products { get; set; } 
   }
 
 }

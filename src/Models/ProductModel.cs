@@ -25,12 +25,10 @@ namespace api.Models
 
         //Relation 1-M between category and Products
         public Guid CategoryId { get; set; }//Foreign Key
-        // public CategoryModel? Category { get; set; }
-        //public Category Category { get; set; }
-        public DateTime CreatedAt { get; set; }
-
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         //Relation M-M between Orders and Products
+        public CategoryModel? Category { get; set; }
         List<OrderItemModel> OrderItems { get; set; }
     }
 }

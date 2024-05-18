@@ -11,33 +11,33 @@ namespace api.Services
         {
             _appDbContext = appDbContext;
         }
-    public async Task<IEnumerable<Category>> GetAllCategoryService()
-    {
-        return await _appDbContext.Categories.ToListAsync();
-    }
-    public async Task<Category?> GetCategoryById(Guid categoryId)
-    {
-        return await _appDbContext.Categories.Include(c => c.Products).FirstOrDefaultAsync(category => category.CategoryId == categoryId);
-    }
-    public async Task<Category> CreateCategoryService(Category newCategory)
-    {
-        
-        newCategory.CategoryId = Guid.NewGuid();
-        newCategory.Slug = Slug.GenerateSlug(newCategory.Name);
-        newCategory.CreatedAt = DateTime.UtcNow;
-        _appDbContext.Categories.Add(newCategory); 
-        await _appDbContext.SaveChangesAsync();
-        return newCategory;
-    }
-    public async Task<Category?> UpdateCategoryService(Guid categoryId, Category updateCategory)
-    {
-        var existingCategory = _appDbContext.Categories.FirstOrDefault(c => c.CategoryId == categoryId);
-        if (existingCategory != null)
+        public async Task<IEnumerable<Category>> GetAllCategoryService()
+        {
+            return await _appDbContext.Categories.ToListAsync();
+        }
+        public async Task<Category?> GetCategoryById(Guid categoryId)
+        {
+            return await _appDbContext.Categories.FirstOrDefaultAsync(category => category.CategoryId == categoryId);
+        }
+        public async Task<Category> CreateCategoryService(Category newCategory)
+        {
+
+            newCategory.CategoryId = Guid.NewGuid();
+            newCategory.Slug = Slug.GenerateSlug(newCategory.Name);
+            newCategory.CreatedAt = DateTime.UtcNow;
+            _appDbContext.Categories.Add(newCategory);
+            await _appDbContext.SaveChangesAsync();
+            return newCategory;
+        }
+        public async Task<Category?> UpdateCategoryService(Guid categoryId, Category updateCategory)
+        {
+            var existingCategory = _appDbContext.Categories.FirstOrDefault(c => c.CategoryId == categoryId);
+            if (existingCategory != null)
             {
                 existingCategory.Name = updateCategory.Name;
                 existingCategory.Slug = Slug.GenerateSlug(existingCategory.Name);
                 existingCategory.Description = updateCategory.Description;
-                
+
             }
             await _appDbContext.SaveChangesAsync();
             return existingCategory;

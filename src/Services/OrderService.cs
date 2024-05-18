@@ -32,7 +32,7 @@ namespace api.Services
         public async Task<Order> PostOrder(Order newOrder)
         {
             newOrder.OrderId = Guid.NewGuid();
-            newOrder.OrderDate = DateTime.UtcNow; 
+            newOrder.OrderDate = DateTime.UtcNow;
             _appDbContext.Orders.Add(newOrder); // add record to context
             await _appDbContext.SaveChangesAsync(); // save to DB
             return newOrder;

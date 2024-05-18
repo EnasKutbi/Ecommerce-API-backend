@@ -10,16 +10,16 @@ using Microsoft.IdentityModel.Tokens;
 namespace api.Services
 {
 
-public class AuthService
-{
-    private readonly IConfiguration _configuration;
-
-    public AuthService(IConfiguration configuration)
+    public class AuthService
     {
-        _configuration = configuration;
-        Console.WriteLine($"{_configuration["Jwt:Issuer"]}");
-    }
-    public string GenerateJwt(UserDto user)
+        private readonly IConfiguration _configuration;
+
+        public AuthService(IConfiguration configuration)
+        {
+            _configuration = configuration;
+            Console.WriteLine($"{_configuration["Jwt:Issuer"]}");
+        }
+        public string GenerateJwt(UserDto user)
         {
 
             var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Key"]);

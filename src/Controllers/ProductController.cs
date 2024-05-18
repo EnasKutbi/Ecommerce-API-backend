@@ -52,7 +52,7 @@ namespace api.Controllers
             }
         }
         [HttpPost]
-        // [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateProduct(Product newProduct)
         {
             try
@@ -80,7 +80,7 @@ namespace api.Controllers
         }
 
         [HttpPut("{productId}")]
-        // [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateProductService(Guid productId, Product updateProduct)
         {
             try
@@ -103,7 +103,7 @@ namespace api.Controllers
             }
         }
         [HttpDelete("{productId}")]
-        // [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteProduct(Guid productId)
         {
             try

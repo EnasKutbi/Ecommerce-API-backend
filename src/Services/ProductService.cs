@@ -39,36 +39,6 @@ namespace api.Services
             };
         }
 
-        // public async Task <PaginationDto<ProductModel>> GetProducts(int pageNumber, int pageSize)
-
-        // {
-        //     var totalProductCount = await _appDbContext.Products.CountAsync();
-
-
-        //     var products = await _appDbContext.Products.Select(p => new ProductModel
-        //     {
-        //         ProductId = p.ProductId,
-        //         Name = p.Name,
-        //         Slug = p.Slug,
-        //         ImageUrl = p.ImageUrl,
-        //         Description = p.Description,
-        //         Sold = p.Sold,
-        //         Price = p.Price,
-        //         Quantity = p.Quantity,
-        //         Shipping = p.Shipping,
-        //     })
-        //     .Skip((pageNumber - 1) * pageSize)
-        //     .Take(pageSize)
-        //     .ToListAsync();
-        //     return new PaginationDto<ProductModel>
-        //     {
-        //         Items = products,
-        //         TotalCount = totalProductCount,
-        //         PageNumber = pageNumber,
-        //         PageSize = pageSize
-        //     };
-        // }
-
         public async Task<Product?> GetProductById(Guid productId)
         {
             return await _appDbContext.Products.FirstOrDefaultAsync(p => p.ProductId == productId);
@@ -83,20 +53,8 @@ namespace api.Services
             await _appDbContext.SaveChangesAsync();
             return newProduct;
         }
-        // public async Task AddProductOrder(Guid ProductId, Guid OrderId)
-        // {
-        //     var orderItem = new OrderItem
-        //     {
-        //         OrderId = OrderId,
-        //         ProductId = ProductId
-        //     };
-
-        //     await _appDbContext.OrderItems.AddAsync(orderItem);
-        //     await _appDbContext.SaveChangesAsync();
-        // }
         public async Task<Product?> UpdateProductService(Guid productId, Product updateProduct)
         {
-            //     //create record 
             var productUpdated = await _appDbContext.Products.FirstOrDefaultAsync(p =>
             p.ProductId == productId);
             {
