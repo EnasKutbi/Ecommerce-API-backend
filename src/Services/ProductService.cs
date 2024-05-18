@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using api.DTOs;
+using api.Helpers;
 using api.EntityFramework;
 using api.Models;
 using Microsoft.EntityFrameworkCore;
@@ -20,72 +21,67 @@ namespace api.Services
 
         }
 
-        public async Task <PaginationDto<ProductModel>> GetProducts(int pageNumber, int pageSize)
-
+        public async Task<PaginationDto<Product>> GetProducts(int pageNumber, int pageSize)
         {
             var totalProductCount = await _appDbContext.Products.CountAsync();
 
-
             var products = await _appDbContext.Products
-            .Select(p => new ProductModel
-            {
-                ProductId = p.ProductId,
-                Name = p.Name,
-                Slug = p.Slug,
-                ImageUrl = p.ImageUrl,
-                Description = p.Description,
-                Sold = p.Sold,
-                Price = p.Price,
-                Quantity = p.Quantity,
-                Shipping = p.Shipping,
-            })
-            .Skip((pageNumber - 1) * pageSize)
-            .Take(pageSize)
-            .ToListAsync();
-            return new PaginationDto<ProductModel>
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return new PaginationDto<Product>
             {
                 Items = products,
                 TotalCount = totalProductCount,
                 PageNumber = pageNumber,
                 PageSize = pageSize
             };
-
-             //return await appDbContext.Products
-               //.Include(product => product.Category)
-               //.Include(product => product.OrderItems)
-               //.ThenInclude(orderItem => orderItem.Product)
-            //.ToListAsync();//using appContext to return all product on table
-
         }
+
+        // public async Task <PaginationDto<ProductModel>> GetProducts(int pageNumber, int pageSize)
+
+        // {
+        //     var totalProductCount = await _appDbContext.Products.CountAsync();
+
+
+        //     var products = await _appDbContext.Products.Select(p => new ProductModel
+        //     {
+        //         ProductId = p.ProductId,
+        //         Name = p.Name,
+        //         Slug = p.Slug,
+        //         ImageUrl = p.ImageUrl,
+        //         Description = p.Description,
+        //         Sold = p.Sold,
+        //         Price = p.Price,
+        //         Quantity = p.Quantity,
+        //         Shipping = p.Shipping,
+        //     })
+        //     .Skip((pageNumber - 1) * pageSize)
+        //     .Take(pageSize)
+        //     .ToListAsync();
+        //     return new PaginationDto<ProductModel>
+        //     {
+        //         Items = products,
+        //         TotalCount = totalProductCount,
+        //         PageNumber = pageNumber,
+        //         PageSize = pageSize
+        //     };
+        // }
 
         public async Task<Product?> GetProductById(Guid productId)
         {
             return await _appDbContext.Products.FirstOrDefaultAsync(p => p.ProductId == productId);
         }
-        public async Task<Product> CreateProductService(Product newProduct)
+        public async Task<Product> CreateProductService(Product newProduct, Guid categoryId)
         {
             newProduct.ProductId = Guid.NewGuid();
+            newProduct.Slug = Slug.GenerateSlug(newProduct.Name);
+            newProduct.CategoryId = categoryId;
             newProduct.CreatedAt = DateTime.UtcNow;
             _appDbContext.Products.Add(newProduct);
             await _appDbContext.SaveChangesAsync();
             return newProduct;
-
-            // var product = new Product
-            // {
-            //     Id = Guid.NewGuid(),
-            //     Name = newProduct.Name,
-            //     Slug = newProduct.Slug,
-            //     ImageUrl = newProduct.ImageUrl,
-            //     Description = newProduct.Description,
-            //     Price = newProduct.Price,
-            //     Quantity = newProduct.Quantity,
-            //     Sold = newProduct.Sold,
-            //     Shipping = newProduct.Shipping,
-            //     CreatedAt = newProduct.CreatedAt
-            // };
-            // _appDbContext.Products.Add(newProduct);
-            // await _appDbContext.SaveChangesAsync();
-            // return newProduct;
         }
         // public async Task AddProductOrder(Guid ProductId, Guid OrderId)
         // {

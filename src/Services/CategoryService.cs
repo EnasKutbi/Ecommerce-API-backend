@@ -17,7 +17,7 @@ namespace api.Services
     }
     public async Task<Category?> GetCategoryById(Guid categoryId)
     {
-        return await _appDbContext.Categories.FirstOrDefaultAsync(category => category.CategoryId == categoryId);
+        return await _appDbContext.Categories.Include(c => c.Products).FirstOrDefaultAsync(category => category.CategoryId == categoryId);
     }
     public async Task<Category> CreateCategoryService(Category newCategory)
     {

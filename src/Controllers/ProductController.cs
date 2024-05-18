@@ -11,9 +11,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
 {
-
-    [Route("api/products")]
     [ApiController]
+    [Route("api/products")]
     public class ProductController : ControllerBase
     {
         private readonly ProductService _productService;
@@ -26,8 +25,8 @@ namespace api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllProducts([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 3)
         {
-            var product = await _productService.GetProducts(pageNumber, pageSize);
-            return ApiResponse.Success(product, "All products are returned successfully");
+            var products = await _productService.GetProducts(pageNumber, pageSize);
+            return ApiResponse.Success(products, "All products are returned successfully");
         }
 
         [HttpGet("{productId}")]
@@ -53,11 +52,13 @@ namespace api.Controllers
             }
         }
         [HttpPost]
+        // [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateProduct(Product newProduct)
         {
             try
             {
-                var createdProduct = await _productService.CreateProductService(newProduct);
+                Guid categoryId = newProduct.CategoryId;
+                var createdProduct = await _productService.CreateProductService(newProduct, categoryId);
                 if (createdProduct != null)
                 {
                     return CreatedAtAction(nameof(GetProduct), new { productId = createdProduct.ProductId }, createdProduct);
@@ -78,20 +79,8 @@ namespace api.Controllers
             }
         }
 
-        // [HttpPost("AddOrderItem")]
-        // public async Task<IActionResult> AddProductOrder([FromQuery] Guid ProductId, [FromQuery] Guid OrderId)
-        // {
-        //     try
-        //     {
-        //         await _productService.AddProductOrder(ProductId, OrderId);
-        //         return ApiResponse.Created("created");
-        //     }
-        //     catch (Exception ex)
-        //     {
-        //         return ApiResponse.ServerError(ex.Message);
-        //     }
-        // }
         [HttpPut("{productId}")]
+        // [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateProductService(Guid productId, Product updateProduct)
         {
             try
@@ -114,6 +103,7 @@ namespace api.Controllers
             }
         }
         [HttpDelete("{productId}")]
+        // [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteProduct(Guid productId)
         {
             try

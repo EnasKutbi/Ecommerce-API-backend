@@ -41,7 +41,7 @@ namespace api.EntityFramework
                 entity.Property(p => p.Name).IsRequired().HasMaxLength(100);
                 entity.Property(p => p.Slug).HasMaxLength(100);
                 entity.Property(p => p.ImageUrl);
-                entity.Property(p => p.Description).HasMaxLength(300);;
+                entity.Property(p => p.Description);
                 entity.Property(p => p.Price).IsRequired();
                 entity.Property(p => p.Quantity);
                 entity.Property(p => p.Sold);
