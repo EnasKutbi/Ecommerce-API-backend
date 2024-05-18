@@ -14,10 +14,10 @@ namespace api.Models
         [Required]
         public Guid UserId { get; set; } // foreign key to users table
     
+        // [Required]
+        // public Guid ProductId { get; set; } // foreign key to products table
         [Required]
-        public Guid ProductId { get; set; } // foreign key to products table
-        [Required]
-        public required string OrderStatus { get; set; }
+        public string OrderStatus { get; set; }
         [Required]
         public int OrderTotal { get; set; }
         public DateTime OrderDate { get; set; }
@@ -25,6 +25,6 @@ namespace api.Models
         public UserModel? User { get; set; } // 1-1 relation
 
         //Relation M-M between Orders and Products
-        public List<OrderItemModel>? OrderItems { get; set; }
+        public ICollection<OrderItemModel> OrderItems { get; set; }
     }
 }

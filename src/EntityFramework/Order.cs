@@ -13,7 +13,7 @@ namespace api.EntityFramework
 
         [Required]
         [MaxLength(30)]
-        public required string OrderStatus { get; set; }
+        public string OrderStatus { get; set; }
         [Required]
         public int OrderTotal { get; set; }
         public DateTime OrderDate { get; set; } = DateTime.UtcNow;
@@ -23,6 +23,6 @@ namespace api.EntityFramework
 
         //Relationships
         public User? User { get; set; } // get User Entity
-        public List<OrderItem>? OrderItems { get; set; } // for M-M with product
+        public ICollection<OrderItem> OrderItems { get; set; } // for M-M with product
     }
 }

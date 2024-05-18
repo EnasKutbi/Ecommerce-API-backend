@@ -7,7 +7,6 @@ namespace api.Models
 {
   public class OrderItemModel
   {
-    
     public Guid OrderId { get; set; }//Foreign Key
     
     [Column("product_id")]
@@ -15,7 +14,5 @@ namespace api.Models
    
     public int Quantity { get; set; }
     //Relations M-M between Orders and Products
-    public OrderModel? Order { get; set; }
-    public ProductModel? Product { get; set; }
   }
 }

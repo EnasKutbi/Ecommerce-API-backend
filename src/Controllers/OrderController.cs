@@ -103,12 +103,12 @@ namespace api.Controllers
         }
         /// Put
         [HttpPut("{orderId}")]
-        public async Task<IActionResult> PutOrder(Guid orderId, Order putorder)
+        public async Task<IActionResult> PutOrder(Guid orderId, Order putOrder)
         {
             try
             {
 
-                var order = await _orderService.PutOrder(orderId, putorder);
+                var order = await _orderService.PutOrder(orderId, putOrder);
                 if (order == null)
                 {
                     return NotFound(new ErrorResponse { Message = "There is no order found to update." });
@@ -117,7 +117,7 @@ namespace api.Controllers
                 {
                     return Ok(new SuccessResponse<Order>
                     {
-                        Message = "Order is updated  succeefully",
+                        Message = "Order is updated  successfully",
                         Data = order
                     });
                 }
@@ -144,7 +144,7 @@ namespace api.Controllers
                 {
                     return Ok(new SuccessResponse<Order>
                     {
-                        Message = "Order is deleted succeefully",
+                        Message = "Order is deleted successfully",
                     });
                 }
             }
@@ -157,45 +157,3 @@ namespace api.Controllers
         }
     }
 }
-
-/* 
- [HttpPost]
-        public IActionResult PostOrder(OrderModel newOrder)
-        {
-            try
-            {
-                _orderService.PostOrder(newOrder);
-                return Ok("Order Created Successfully");
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-        [HttpPut("{orderId}")]
-        public IActionResult PutOrder(Guid orderId, OrderModel putorder)
-        {
-            try
-            {
-                _orderService.PutOrder(orderId, putorder);
-                return Ok("Order Updated Successfully");
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-        [HttpDelete("{orderId}")]
-        public IActionResult DeleteOrder(Guid orderId)
-        {
-            try
-            {
-                _orderService.DeleteOrder(orderId);
-                return Ok("Order Deleted Successfully");
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-*/
