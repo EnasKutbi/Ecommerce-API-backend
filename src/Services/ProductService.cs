@@ -21,23 +21,58 @@ namespace api.Services
 
         }
 
-        public async Task<PaginationDto<Product>> GetProducts(int pageNumber, int pageSize)
+        public async Task<PaginationDto<Product>> GetProducts(QueryParameters queryParams)
+
         {
-            var totalProductCount = await _appDbContext.Products.CountAsync();
+            // Start with a base query
+            var query = _appDbContext.Products.AsQueryable();
 
-            var products = await _appDbContext.Products
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
-                .ToListAsync();
+            // Apply search keyword filter
+            if (!string.IsNullOrEmpty(queryParams.SearchKeyword))
+            {
+                query = query.Where(p => p.Name.ToLower().Contains(queryParams.SearchKeyword.ToLower()) || p.Description.ToLower().Contains(queryParams.SearchKeyword.ToLower()));
+            }
 
+            // Apply sorting
+            if (!string.IsNullOrEmpty(queryParams.SortBy))
+            {
+                query = queryParams.SortOrder == "desc"
+                ? query.OrderByDescending(u => EF.Property<object>(u, queryParams.SortBy))
+                : query.OrderBy(u => EF.Property<object>(u, queryParams.SortBy));
+            }
+
+            var totalProductCount = await query.CountAsync();
+
+            var products = await query
+            .Skip((queryParams.PageNumber - 1) * queryParams.PageSize)
+            .Take(queryParams.PageSize)
+            .ToListAsync();
             return new PaginationDto<Product>
             {
                 Items = products,
                 TotalCount = totalProductCount,
-                PageNumber = pageNumber,
-                PageSize = pageSize
+                PageNumber = queryParams.PageNumber,
+                PageSize = queryParams.PageSize
             };
         }
+
+        // public async Task<PaginationDto<Product>> GetProducts(int pageNumber, int pageSize)
+        // {
+        //     var totalProductCount = await _appDbContext.Products.CountAsync();
+
+        //     var products = await _appDbContext.Products
+        //         .Skip((pageNumber - 1) * pageSize)
+        //         .Take(pageSize)
+        //         .ToListAsync();
+
+        //     return new PaginationDto<Product>
+        //     {
+        //         Items = products,
+        //         TotalCount = totalProductCount,
+        //         PageNumber = pageNumber,
+        //         PageSize = pageSize
+        //     };
+        // }
 
         public async Task<Product?> GetProductById(Guid productId)
         {

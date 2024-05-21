@@ -21,12 +21,22 @@ namespace api.Controllers
             _productService = new ProductService(appDbContext);
         }
 
-
         [HttpGet]
-        public async Task<IActionResult> GetAllProducts([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 3)
+        public async Task<IActionResult> GetProducts([FromQuery] QueryParameters queryParams)
         {
-            var products = await _productService.GetProducts(pageNumber, pageSize);
-            return ApiResponse.Success(products, "All products are returned successfully");
+            try
+            {
+                var product = await _productService.GetProducts(queryParams);
+                if (product == null)
+                {
+                    return ApiResponse.NotFound("No Product Found");
+                }
+                return ApiResponse.Success(product, "All products are returned successfully");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         [HttpGet("{productId}")]
