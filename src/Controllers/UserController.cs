@@ -25,6 +25,7 @@ namespace api.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAllUsers()
         {
             try
@@ -154,7 +155,6 @@ namespace api.Controllers
             }
         }
 
-        [Authorize(Roles = "Admin")]
         [HttpGet("profile")]
         public async Task<IActionResult> GetUserProfile(Guid userId)
         {
