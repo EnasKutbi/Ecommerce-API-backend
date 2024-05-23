@@ -21,6 +21,7 @@ namespace api.Controllers
             _orderService = new OrderService(appDbContext);
         }
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetOrders()
         {
             try
@@ -48,6 +49,7 @@ namespace api.Controllers
 
         /// Get By ID
         [HttpGet("{orderId}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetOrderById(Guid orderId)
         {
             try
@@ -130,6 +132,7 @@ namespace api.Controllers
         }
         /// DElete
         [HttpDelete("{orderId}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteOrder(Guid orderId)
         {
             try
