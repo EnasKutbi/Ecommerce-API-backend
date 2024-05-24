@@ -112,7 +112,7 @@ namespace api.Controllers
         }
 
         [HttpPut("{userId}")]
-        public async Task<IActionResult> UpdateUser(Guid userId, UserModel updateUser)
+        public async Task<IActionResult> UpdateUser(Guid userId, UpdateUserDto updateUser)
         {
             try
             {

@@ -53,20 +53,45 @@ namespace api.Services
             return createUser;
         }
 
-        public async Task<User?> UpdateUserService(Guid userId, UserModel updateUser)
+        public async Task<User?> UpdateUserService(Guid userId, UpdateUserDto updateUser)
         {
-            var existingUser = await _appDbContext.Users.FirstOrDefaultAsync(u => u.UserId == userId);
-            if (existingUser != null)
+            var user = await _appDbContext.Users.FindAsync(userId);
+            if (user == null)
             {
-                existingUser.Name = updateUser.Name;
-                // existingUser.Email = updateUser.Email;
-                // existingUser.Password = _passwordHasher.HashPassword(null, updateUser.Password);
-                existingUser.Address = updateUser.Address;
-                existingUser.Image = updateUser.Image;
+                return null;
             }
+            if (string.IsNullOrEmpty(updateUser.Name))
+            {
+                updateUser.Name = user.Name;
+            }
+            if (string.IsNullOrEmpty(updateUser.Address))
+            {
+                updateUser.Address = user.Address;
+            }
+            if (string.IsNullOrEmpty(updateUser.Image))
+            {
+                updateUser.Image = user.Image;
+            }
+            _mapper.Map(updateUser, user);
+            _appDbContext.Users.Update(user);
             await _appDbContext.SaveChangesAsync();
-            return existingUser;
+            return _mapper.Map<User>(user);
         }
+
+        // public async Task<User?> UpdateUserService(Guid userId, UserModel updateUser)
+        // {
+        //     var existingUser = await _appDbContext.Users.FirstOrDefaultAsync(u => u.UserId == userId);
+        //     if (existingUser != null)
+        //     {
+        //         existingUser.Name = updateUser.Name;
+        //         // existingUser.Email = updateUser.Email;
+        //         // existingUser.Password = _passwordHasher.HashPassword(null, updateUser.Password);
+        //         existingUser.Address = updateUser.Address;
+        //         // existingUser.Image = updateUser.Image;
+        //     }
+        //     await _appDbContext.SaveChangesAsync();
+        //     return existingUser;
+        // }
 
         public async Task<bool> DeleteUserService(Guid userId)
         {
