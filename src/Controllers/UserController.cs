@@ -6,6 +6,7 @@ using api.EntityFramework;
 using api.Models;
 using api.Services;
 using api.Dtos;
+using api.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
@@ -26,18 +27,18 @@ namespace api.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> GetAllUsers()
+        public async Task<IActionResult> GetAllUsers([FromQuery] QueryParameters queryParams)
         {
             try
             {
-                var users = await _userService.GetAllUsersService();
-                if (users.ToList().Count < 1)
+                var users = await _userService.GetAllUsersService(queryParams);
+                if (users == null)
                 {
                     return NotFound(new ErrorResponse { Success = false, Message = "There is no users to display" });
                 }
                 else
                 {
-                    return Ok(new SuccessResponse<IEnumerable<UserDto>> { Success = true, Message = "all users are returned successfully", Data = users });
+                    return Ok(new SuccessResponse<PaginationDto<User>> { Success = true, Message = "all users are returned successfully", Data = users });
                 }
             }
             catch (Exception ex)

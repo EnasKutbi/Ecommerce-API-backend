@@ -5,6 +5,7 @@ using api.EntityFramework;
 using api.Helpers;
 using api.Models;
 using api.Dtos;
+using api.DTOs;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
@@ -24,10 +25,34 @@ namespace api.Services
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<UserDto>> GetAllUsersService()
+        public async Task<PaginationDto<User>> GetAllUsersService(QueryParameters queryParams)
         {
-            var users = await _appDbContext.Users.Select(user => _mapper.Map<UserDto>(user)).ToListAsync();
-            return users;
+            //.Select(user => _mapper.Map<UserDto>(user))
+            var query = _appDbContext.Users.AsQueryable();
+            if (!string.IsNullOrEmpty(queryParams.SearchKeyword))
+            {
+                query = query.Where(u => u.Name.ToLower().Contains(queryParams.SearchKeyword.ToLower()));
+            }
+            if (!string.IsNullOrEmpty(queryParams.SortBy))
+            {
+                query = queryParams.SortOrder == "desc"
+                ? query.OrderByDescending(u => EF.Property<object>(u, queryParams.SortBy))
+                : query.OrderBy(u => EF.Property<object>(u, queryParams.SortBy));
+            }
+
+            var totalUserCount = await query.CountAsync();
+
+            var users = await query
+            .Skip((queryParams.PageNumber - 1) * queryParams.PageSize)
+            .Take(queryParams.PageSize)
+            .ToListAsync();
+            return new PaginationDto<User>
+            {
+                Items = users,
+                TotalCount = totalUserCount,
+                PageNumber = queryParams.PageNumber,
+                PageSize = queryParams.PageSize
+            };
         }
 
         public async Task<UserDto?> GetUserById(Guid userId)
