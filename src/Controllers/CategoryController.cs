@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using api.EntityFramework;
 using api.Services;
+using api.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,18 +21,18 @@ namespace api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllCategory()
+        public async Task<IActionResult> GetAllCategory([FromQuery] QueryParameters queryParams)
         {
             try
             {
-                var categories = await _categoryService.GetAllCategoryService();
-                if (categories.ToList().Count <= 0)
+                var categories = await _categoryService.GetAllCategoryService(queryParams);
+                if (categories == null)
                 {
                     return NotFound(new ErrorResponse { Message = "There is no categories to display" });
                 }
                 else
                 {
-                    return Ok(new SuccessResponse<IEnumerable<Category>>
+                    return Ok(new SuccessResponse<PaginationDto<Category>>
                     {
                         Message = "Categories are returned successfully",
                         Data = categories
