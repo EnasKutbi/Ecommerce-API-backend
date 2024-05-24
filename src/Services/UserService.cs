@@ -59,8 +59,8 @@ namespace api.Services
             if (existingUser != null)
             {
                 existingUser.Name = updateUser.Name;
-                existingUser.Email = updateUser.Email;
-                existingUser.Password = _passwordHasher.HashPassword(null, updateUser.Password);
+                // existingUser.Email = updateUser.Email;
+                // existingUser.Password = _passwordHasher.HashPassword(null, updateUser.Password);
                 existingUser.Address = updateUser.Address;
                 existingUser.Image = updateUser.Image;
             }
