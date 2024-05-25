@@ -29,9 +29,12 @@ namespace api.Services
         {
             //.Select(user => _mapper.Map<UserDto>(user))
             var query = _appDbContext.Users.AsQueryable();
+
+            query = query.Where(u => !u.IsAdmin);
+
             if (!string.IsNullOrEmpty(queryParams.SearchKeyword))
             {
-                query = query.Where(u => u.Name.ToLower().Contains(queryParams.SearchKeyword.ToLower()));
+                query = query.Where(u => u.Name.ToLower().Contains(queryParams.SearchKeyword.ToLower()) || u.Email.ToLower().Contains(queryParams.SearchKeyword.ToLower()));
             }
             if (!string.IsNullOrEmpty(queryParams.SortBy))
             {
