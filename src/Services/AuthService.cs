@@ -31,7 +31,7 @@ namespace api.Services
                 new Claim(ClaimTypes.Role, user.IsAdmin? "Admin" : "User"),
             }),
 
-                Expires = DateTime.UtcNow.AddMinutes(10),
+                Expires = DateTime.UtcNow.AddMinutes(30),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
 
                 Issuer = _configuration["Jwt:Issuer"],
