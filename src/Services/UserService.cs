@@ -106,6 +106,22 @@ namespace api.Services
             return _mapper.Map<User>(user);
         }
 
+        public async Task<bool> Ban_UnbanUserAsync(Guid userId)
+        {
+            var user = await _appDbContext.Users.FindAsync(userId);
+            if (user == null)
+            {
+                return false;
+            }
+
+            user.IsBanned = !user.IsBanned;
+
+            _appDbContext.Users.Update(user);
+            await _appDbContext.SaveChangesAsync();
+
+            return true;
+        }
+
         // public async Task<User?> UpdateUserService(Guid userId, UserModel updateUser)
         // {
         //     var existingUser = await _appDbContext.Users.FirstOrDefaultAsync(u => u.UserId == userId);

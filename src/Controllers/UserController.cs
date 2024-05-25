@@ -134,6 +134,17 @@ namespace api.Controllers
             }
         }
 
+        [HttpPut("ban_unban/{userId}")]
+        public async Task<IActionResult> BanUser(Guid userId)
+        {
+            var result = await _userService.Ban_UnbanUserAsync(userId);
+            if (!result)
+            {
+                return NotFound("User not found");
+            }
+            return Ok("User ban status toggled successfully");
+        }
+
         [HttpDelete("{userId}")]
         public async Task<IActionResult> DeleteUser(Guid userId)
         {
