@@ -11,21 +11,20 @@ using Microsoft.EntityFrameworkCore;
 
 namespace api.Services
 {
-
     public class ProductService
     {
         private AppDbContext _appDbContext;
         public ProductService(AppDbContext appDbContext)
         {
             _appDbContext = appDbContext;
-
         }
 
         public async Task<PaginationDto<Product>> GetProducts(QueryParameters queryParams)
-
         {
             // Start with a base query
-            var query = _appDbContext.Products.AsQueryable();
+            var query = _appDbContext.Products
+                .Include(p => p.Category) // Include the category
+                .AsQueryable();
 
             // Apply search keyword filter
             if (!string.IsNullOrEmpty(queryParams.SearchKeyword))
@@ -56,28 +55,13 @@ namespace api.Services
             };
         }
 
-        // public async Task<PaginationDto<Product>> GetProducts(int pageNumber, int pageSize)
-        // {
-        //     var totalProductCount = await _appDbContext.Products.CountAsync();
-
-        //     var products = await _appDbContext.Products
-        //         .Skip((pageNumber - 1) * pageSize)
-        //         .Take(pageSize)
-        //         .ToListAsync();
-
-        //     return new PaginationDto<Product>
-        //     {
-        //         Items = products,
-        //         TotalCount = totalProductCount,
-        //         PageNumber = pageNumber,
-        //         PageSize = pageSize
-        //     };
-        // }
-
         public async Task<Product?> GetProductById(Guid productId)
         {
-            return await _appDbContext.Products.FirstOrDefaultAsync(p => p.ProductId == productId);
+            return await _appDbContext.Products
+                .Include(p => p.Category) // Include the category
+                .FirstOrDefaultAsync(p => p.ProductId == productId);
         }
+
         public async Task<Product> CreateProductService(Product newProduct, Guid categoryId)
         {
             newProduct.ProductId = Guid.NewGuid();
@@ -88,6 +72,7 @@ namespace api.Services
             await _appDbContext.SaveChangesAsync();
             return newProduct;
         }
+
         public async Task<Product?> UpdateProductService(Guid productId, Product updateProduct)
         {
             var productUpdated = await _appDbContext.Products.FirstOrDefaultAsync(p =>
@@ -108,9 +93,9 @@ namespace api.Services
                 return productUpdated;
             }
         }
+
         public async Task<bool> DeleteProductService(Guid productId)
         {
-
             var productToRemove = _appDbContext.Products.FirstOrDefault(p => p.ProductId == productId);
             if (productToRemove != null)
             {
