@@ -14,5 +14,7 @@ namespace api.Dtos
         public string? Name { get; set; }
         public string? Address { get; set; }
         public string? Image { get; set; }
+        public bool? IsAdmin { get; set; }
+        public bool? IsBanned { get; set; }
     }
 }

@@ -5,4 +5,7 @@ public class QueryParameters
     public string SearchKeyword { get; set; } = "";
     public string SortBy { get; set; } = "Name";
     public string SortOrder { get; set; } = "asc";
+    public List<Guid>? SelectedCategories { get; set; } = new List<Guid>();
+    public decimal? MinPrice { get; set; }
+    public decimal? MaxPrice { get; set; }
 }

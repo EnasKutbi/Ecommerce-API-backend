@@ -13,13 +13,9 @@ namespace api.Services
         {
             _appDbContext = appDbContext;
         }
-        // public async Task<IEnumerable<Category>> GetAllCategoryService(QueryParameters queryParams)
-        // {
-        //     return await _appDbContext.Categories.ToListAsync();
-        // }
         public async Task<PaginationDto<Category>> GetAllCategoryService(QueryParameters queryParams)
         {
-            var query = _appDbContext.Categories.AsQueryable();
+            var query = _appDbContext.Categories.Include(p => p.Products).AsQueryable();
             if (!string.IsNullOrEmpty(queryParams.SearchKeyword))
             {
                 query = query.Where(c => c.Name.ToLower().Contains(queryParams.SearchKeyword.ToLower()) || c.Description.ToLower().Contains(queryParams.SearchKeyword.ToLower()));
@@ -47,44 +43,57 @@ namespace api.Services
 
         }
 
-    public async Task<Category?> GetCategoryById(Guid categoryId)
-    {
-        return await _appDbContext.Categories.FirstOrDefaultAsync(category => category.CategoryId == categoryId);
-    }
-    public async Task<Category> CreateCategoryService(Category newCategory)
-    {
-
-        newCategory.CategoryId = Guid.NewGuid();
-        newCategory.Slug = Slug.GenerateSlug(newCategory.Name);
-        newCategory.CreatedAt = DateTime.UtcNow;
-        _appDbContext.Categories.Add(newCategory);
-        await _appDbContext.SaveChangesAsync();
-        return newCategory;
-    }
-    public async Task<Category?> UpdateCategoryService(Guid categoryId, Category updateCategory)
-    {
-        var existingCategory = _appDbContext.Categories.FirstOrDefault(c => c.CategoryId == categoryId);
-        if (existingCategory != null)
+        public async Task<Category?> GetCategoryById(Guid categoryId)
         {
-            existingCategory.Name = updateCategory.Name;
-            existingCategory.Slug = Slug.GenerateSlug(existingCategory.Name);
-            existingCategory.Description = updateCategory.Description;
-
+            return await _appDbContext.Categories.FirstOrDefaultAsync(category => category.CategoryId == categoryId);
         }
-        await _appDbContext.SaveChangesAsync();
-        return existingCategory;
-    }
-    public async Task<bool> DeleteCategoryService(Guid categoryId)
-    {
-        var categoryToRemove = _appDbContext.Categories.FirstOrDefault(c => c.CategoryId == categoryId);
-        if (categoryToRemove != null)
+        public async Task<Category> CreateCategoryService(Category newCategory)
         {
-            _appDbContext.Categories.Remove(categoryToRemove);
+
+            newCategory.CategoryId = Guid.NewGuid();
+            newCategory.Slug = Slug.GenerateSlug(newCategory.Name);
+            newCategory.CreatedAt = DateTime.UtcNow;
+            _appDbContext.Categories.Add(newCategory);
             await _appDbContext.SaveChangesAsync();
-            return true;
+            return newCategory;
         }
-        return false;
-    }
+        public async Task<Category?> UpdateCategoryService(Guid categoryId, Category updateCategory)
+        {
+            var existingCategory = _appDbContext.Categories.FirstOrDefault(c => c.CategoryId == categoryId);
+            if (existingCategory != null)
+            {
+                if (string.IsNullOrEmpty(updateCategory.Name))
+                {
+                    updateCategory.Name = existingCategory.Name;
+                }
+                else
+                {
+                    existingCategory.Name = updateCategory.Name;
+                    existingCategory.Slug = Slug.GenerateSlug(existingCategory.Name);
+                }
+                if (string.IsNullOrEmpty(updateCategory.Description))
+                {
+                    updateCategory.Description = existingCategory.Description;
+                }
+                else
+                {
+                    existingCategory.Description = updateCategory.Description;
+                }
+            }
+            await _appDbContext.SaveChangesAsync();
+            return existingCategory;
+        }
+        public async Task<bool> DeleteCategoryService(Guid categoryId)
+        {
+            var categoryToRemove = _appDbContext.Categories.FirstOrDefault(c => c.CategoryId == categoryId);
+            if (categoryToRemove != null)
+            {
+                _appDbContext.Categories.Remove(categoryToRemove);
+                await _appDbContext.SaveChangesAsync();
+                return true;
+            }
+            return false;
+        }
 
-}
+    }
 }

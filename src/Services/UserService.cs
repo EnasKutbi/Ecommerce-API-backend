@@ -100,6 +100,14 @@ namespace api.Services
             {
                 updateUser.Image = user.Image;
             }
+            if (!updateUser.IsAdmin.HasValue)
+            {
+                updateUser.IsAdmin = user.IsAdmin;
+            }
+            if (!updateUser.IsBanned.HasValue)
+            {
+                updateUser.IsBanned = user.IsBanned;
+            }
             _mapper.Map(updateUser, user);
             _appDbContext.Users.Update(user);
             await _appDbContext.SaveChangesAsync();
