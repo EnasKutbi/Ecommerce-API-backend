@@ -20,6 +20,6 @@ namespace api.EntityFramework
 
         //Relationships
         public User? User { get; set; } // get User Entity
-        public ICollection<OrderItem> OrderItems { get; set; } // for M-M with product
+        public ICollection<OrderItem>? OrderItems { get; set; } // for M-M with product
     }
 }

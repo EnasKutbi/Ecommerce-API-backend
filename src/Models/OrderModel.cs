@@ -22,6 +22,6 @@ namespace api.Models
         public UserModel? User { get; set; } // 1-1 relation
 
         //Relation M-M between Orders and Products
-        public ICollection<OrderItemModel> OrderItems { get; set; }
+        public ICollection<OrderItemModel>? OrderItems { get; set; }
     }
 }

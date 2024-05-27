@@ -12,5 +12,6 @@ namespace api.EntityFramework
 
     [ForeignKey("ProductId")]
     public Guid ProductId { get; set; }
+    public int Quantity { get; set; }
   }
 }

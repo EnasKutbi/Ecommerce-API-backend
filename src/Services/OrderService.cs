@@ -25,12 +25,16 @@ namespace api.Services
 
         public async Task<PaginationDto<Order>> GetAllOrders(QueryParameters queryParams)
         {
+            // Start with a base query
             var query = _appDbContext.Orders.Include(o => o.User).AsQueryable();
 
+            // Apply search keyword filter
             if (!string.IsNullOrEmpty(queryParams.SearchKeyword))
             {
-                query = query.Where(o => o.OrderStatus.ToLower().Contains(queryParams.SearchKeyword.ToLower()));
+                query = query.Where(p => p.OrderStatus.ToLower().Contains(queryParams.SearchKeyword.ToLower()));
             }
+
+            // Apply sorting
             if (!string.IsNullOrEmpty(queryParams.SortBy))
             {
                 query = queryParams.SortOrder == "desc"

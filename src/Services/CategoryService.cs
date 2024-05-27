@@ -15,7 +15,7 @@ namespace api.Services
         }
         public async Task<PaginationDto<Category>> GetAllCategoryService(QueryParameters queryParams)
         {
-            var query = _appDbContext.Categories.Include(p => p.Products).AsQueryable();
+            var query = _appDbContext.Categories.AsQueryable();
             if (!string.IsNullOrEmpty(queryParams.SearchKeyword))
             {
                 query = query.Where(c => c.Name.ToLower().Contains(queryParams.SearchKeyword.ToLower()) || c.Description.ToLower().Contains(queryParams.SearchKeyword.ToLower()));
