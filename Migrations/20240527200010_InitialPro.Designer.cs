@@ -12,8 +12,8 @@ using api.EntityFramework;
 namespace Backend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240517024535_UpdateProduct3")]
-    partial class UpdateProduct3
+    [Migration("20240527200010_InitialPro")]
+    partial class InitialPro
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -101,8 +101,7 @@ namespace Backend.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<int>("Quantity")
-                        .HasColumnType("integer")
-                        .HasColumnName("quantity");
+                        .HasColumnType("integer");
 
                     b.HasKey("OrderId", "ProductId");
 
@@ -230,21 +229,17 @@ namespace Backend.Migrations
 
             modelBuilder.Entity("api.EntityFramework.OrderItem", b =>
                 {
-                    b.HasOne("api.EntityFramework.Order", "Order")
+                    b.HasOne("api.EntityFramework.Order", null)
                         .WithMany("OrderItems")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("api.EntityFramework.Product", "Product")
+                    b.HasOne("api.EntityFramework.Product", null)
                         .WithMany("OrderItems")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Order");
-
-                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("api.EntityFramework.Product", b =>
