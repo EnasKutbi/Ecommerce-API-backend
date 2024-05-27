@@ -12,9 +12,5 @@ namespace api.EntityFramework
 
     [ForeignKey("ProductId")]
     public Guid ProductId { get; set; }
-
-    [Required(ErrorMessage = "Quantity is required.")]
-    [Column("quantity")]
-    public int Quantity { get; set; }
   }
 }

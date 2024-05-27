@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using api.EntityFramework;
 using api.Models;
+using api.DTOs;
 using Microsoft.EntityFrameworkCore;
 
 namespace api.Services
@@ -17,15 +18,45 @@ namespace api.Services
         }
 
         ////// Get All
-        public async Task<IEnumerable<Order>> GetAllOrders()
+        // public async Task<IEnumerable<Order>> GetAllOrders()
+        // {
+        //     return await _appDbContext.Orders.ToListAsync();
+        // }
+
+        public async Task<PaginationDto<Order>> GetAllOrders(QueryParameters queryParams)
         {
-            return await _appDbContext.Orders.ToListAsync();
+            var query = _appDbContext.Orders.Include(o => o.User).AsQueryable();
+
+            if (!string.IsNullOrEmpty(queryParams.SearchKeyword))
+            {
+                query = query.Where(o => o.OrderStatus.ToLower().Contains(queryParams.SearchKeyword.ToLower()));
+            }
+            if (!string.IsNullOrEmpty(queryParams.SortBy))
+            {
+                query = queryParams.SortOrder == "desc"
+                ? query.OrderByDescending(u => EF.Property<object>(u, queryParams.SortBy))
+                : query.OrderBy(u => EF.Property<object>(u, queryParams.SortBy));
+            }
+
+            var totalOrderCount = await query.CountAsync();
+
+            var orders = await query
+            .Skip((queryParams.PageNumber - 1) * queryParams.PageSize)
+            .Take(queryParams.PageSize)
+            .ToListAsync();
+            return new PaginationDto<Order>
+            {
+                Items = orders,
+                TotalCount = totalOrderCount,
+                PageNumber = queryParams.PageNumber,
+                PageSize = queryParams.PageSize
+            };
         }
 
         //////// Get By ID
         public async Task<Order?> GetOrderById(Guid orderId)
         {
-            return await _appDbContext.Orders.FirstOrDefaultAsync(order => order.OrderId == orderId);
+            return await _appDbContext.Orders.Include(o => o.User).FirstOrDefaultAsync(order => order.OrderId == orderId);
         }
 
         ////// Post

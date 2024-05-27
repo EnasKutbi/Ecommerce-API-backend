@@ -13,7 +13,7 @@ namespace api.EntityFramework
 
         [Required]
         [MaxLength(30)]
-        public string OrderStatus { get; set; }
+        public string OrderStatus { get; set; } = "processing";
         [Required]
         public int OrderTotal { get; set; }
         public DateTime OrderDate { get; set; } = DateTime.UtcNow;

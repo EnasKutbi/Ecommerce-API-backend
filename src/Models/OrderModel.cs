@@ -14,7 +14,7 @@ namespace api.Models
         [Required]
         public Guid UserId { get; set; } // foreign key to users table
         [Required]
-        public string OrderStatus { get; set; }
+        public string OrderStatus { get; set; } = "processing";
         [Required]
         public int OrderTotal { get; set; }
         public DateTime OrderDate { get; set; } = DateTime.UtcNow;
